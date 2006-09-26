@@ -42,6 +42,12 @@ margin-top:4px;
 border:1px solid #000;
 width:454px;
 }
+#copyright{
+margin-left:expression(Math.floor(screen.width/2 - 456/2) + "px");
+margin-top:4px;
+width:454px;
+text-align:center;
+}
 </style>
 <body>
 <script>
@@ -57,6 +63,9 @@ document.body.scroll="no";
 <div class="clearline"></div>
 <div id="tutorial">
 <img src="./tutorial.gif" />
+</div>
+<div id="copyright">
+<span style="font-weight:bold">nscGameFramework</span> and all <span style="font-weight:bold">RichWebTools</span> are developed by <a href="mailto:homyu.shinn@gmail.com"><span style="font-weight:bold">Norman Xu</span></a> and protected by <a href="http://www.opensource.org/licenses/bsd-license.php"><span style="font-weight:bold">new BSD license</span></a>, all source code could be downloaded from <a href="http://code.google.com/p/richwebtool/"><span style="font-weight:bold">Google Code Project</span></a>
 </div>
 </body>
 </html>
