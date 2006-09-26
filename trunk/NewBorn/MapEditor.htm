@@ -1,0 +1,38 @@
+<html>
+<style>
+body{
+margin:0px;
+}
+#Map{
+background-image:url(./aaa.jpg);
+width:640px;
+height:480px;
+}
+#bb{
+width:640px;
+height:100px;
+}
+</style>
+<body>
+<div id="Map" onclick="addSign()">
+
+</div>
+<textarea id="bb"></textarea>
+<script>
+map = document.getElementById("Map");
+function addSign(){
+this.sign = document.createElement("div");
+this.sign.style.backgroundColor = "#FFF";
+this.sign.style.width = "4px";
+this.sign.style.height = "4px";
+this.sign.style.border="1px solid #000";
+this.sign.style.fontSize = "1px";
+this.sign.style.position = "absolute";
+this.sign.className="this.sign";
+this.sign.style.left = event.x;
+this.sign.style.top = event.y;
+map.appendChild(sign);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+body{
+	margin:0px;
+}
+#nsgPlayGround{
+	border:1px solid #000;
+	width:454px;
+	height:340px;
+}
+#nsgDebug{
+	padding-left:6px;
+	font:9px tahoma;
+	color:red;
+	background-color:#000;
+	width:634px;
+	display:none;
+}
+.nsgRollPerson{
+
+}
