@@ -1,0 +1,17 @@
+  switch(actorType) {
+      case "actor" :
+        skin = 'SonnyBlue';
+        break;
+      case "car" :
+        skin = 'Default';
+        break;
+      default:
+        skin = 'Default';
+    }
+
+///////////////////////////
+
+		fLine =Math.sqrt(nbLineSquare - xLine * xLine);
+
+0 都为加
+1 都为减

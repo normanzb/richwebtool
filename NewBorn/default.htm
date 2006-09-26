@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Norman's Time Machine</title>
+</head>
+<style>
+*{
+margin:0px;padding:0px;
+font:9px tahoma;
+color:#000;
+}
+body{
+background-color:#FFF;
+}
+a{
+text-decoration:none;
+}
+#navigator{
+margin-left:expression(Math.floor(screen.width/2 - 454/2) + "px");
+width:454px;
+margin-top:expression(Math.floor(screen.height/10) + "px");
+text-align:left;
+}
+#gf{
+	margin-left:expression(Math.floor(screen.width/2 - 456/2) + "px");
+
+}
+#notice{
+background-image:url(./notice.gif);
+width:195px;
+height:158px;
+position:absolute;
+left:expression(Math.floor(screen.width/2 + 10) + "px");
+top:70px;
+}
+.clearline{
+clear:both;
+}
+#tutorial{
+margin-left:expression(Math.floor(screen.width/2 - 456/2) + "px");
+margin-top:4px;
+border:1px solid #000;
+width:454px;
+}
+</style>
+<body>
+<script>
+document.body.scroll="no";
+</script>
+<div id="navigator">Visit my <strong><a href="http://www.flickr.com/photos/homyu/"><span style="color:#0063DC;font-weight:bolder">flick</span><span style="color:#ff0084;font-weight:bolder">r</span></a></strong> and <a href="http://www.box.net/public/too3v7naay" style="font-weight:bolder">box.net</a> shared folder</div>
+<div id="gf">
+<iframe id="gameFrame" src="./gameFrame.html" width="456" height="342" scrolling="no" frameborder="no"></iframe>
+</div>
+<div id="notice">
+	
+</div>
+<div class="clearline"></div>
+<div id="tutorial">
+<img src="./tutorial.gif" />
+</div>
+</body>
+</html>
