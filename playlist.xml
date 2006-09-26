@@ -1,0 +1,9 @@
+﻿<nscPlaylist>
+	<playconfig autostart="1" loopmode="0" />
+	<musiclist>
+		<music name="上海滩" src="http://www2.joyes.com/www/upload_rings/mp3/20040801111839.mp3" author="刘德华" album="" picture="" scription="" recommender="" />
+		<music name="Bad Day" src="http://wm.warnermusic.com/France/danielpowter/danielpowter/Bad_Day_hi.wmv" author="Daniel Powter" album="" picture="" scription="" recommender="" />
+		<music name="You are beautiful" src="http://down.hz0752.com/music/xzmusic/0/youarebeautiful.mp3" author="James Blunt" album="" picture="" scription="" recommender="" />
+		<music name="You are beautiful" src="http://www.e-paipai.com/mypai/up/video/paipai_dgs_video_2005_10_19_9_37_37.wmv" author="找微" album="" picture="" scription="" recommender="" />
+	</musiclist>
+</nscPlaylist>
