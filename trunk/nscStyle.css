@@ -1,0 +1,262 @@
+/* Default skin for nscWebTools by http://eroman.org 
+8:58 2006-5-26 */
+#nscUIArea{
+	position:absolute;
+	left:0px;
+	top:40px;
+	border:0px solid #000;
+	width:220px;
+	height:240px;
+	color:#FFF;
+	text-align:center;
+	font:12px tahoma;
+	padding:0px;
+	margin:0px;
+	display:none;
+	z-index:10000000;
+}
+#nscInnerUIArea{
+	
+}
+#nscMainArea{
+	float:left;
+	width:180px;
+	height:240px;
+	background-image:url('./Skins/default/background.gif');
+}
+#nscInnerMainArea{
+	width:160px;
+	padding:10px;
+	height:220px;
+}
+#nscCatcher{
+	float:right;
+	width:40px;
+	height:240px;
+	background-image:url('./Skins/default/catcher.gif');
+	cursor:pointer;
+}
+#nscToolBar{
+	height:20px;
+	text-align:left;
+}
+#nscWorkArea{
+	height:190px;
+	margin-top:10px;
+}
+/* nscWebPlayer */
+#nscWPCaption{
+	width:160px;
+	height:30px;
+	overflow:hidden;
+}
+#nscWPButtons{
+	width:160px;
+	height:30px;
+}
+#nscWPPlaylist{
+	width:160px;
+	height:120px;
+	text-align:left;
+	clear:both;
+}
+#nscWPListTitle{
+	width:160px;
+	height:20px;
+}
+#nscWPListBox{
+	width:160px;
+	height:90px;
+	overflow:scroll;
+	overflow-y:scroll;
+	overflow-x:hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+}
+
+#nscWPMarquee{
+	width:160px;
+	color:#FFF;
+	height:16px;
+	overflow:hidden;
+	text-align:left;
+}
+#nscWPbtnPlay{
+	height:16px;
+	width:16px;
+	background-color:#FFF;
+	float:left;
+	color:#000;
+	cursor:pointer;
+}
+#nscWPbtnStop{
+	height:16px;
+	width:16px;
+	background-color:#FFF;
+	float:left;
+	color:#000;
+	cursor:pointer;
+}
+#nscWPbtnInfo{
+	height:16px;
+	width:16px;
+	background-color:#FFF;
+	float:left;
+	color:#000;
+	cursor:pointer;
+}
+#nscWPbtnCast{
+	height:16px;
+	width:80px;
+	background-color:#FFF;
+	float:left;
+	color:#000;
+	cursor:pointer;
+	float:right;
+}
+.nscWPPlaylistMusics{
+	width:160px;
+	height:16px;
+
+}
+
+.nscMessageBox{
+	position:absolute;
+	width:300px;
+	cursor:default;
+	text-align:left;
+}
+.nscMessageBox a{
+	text-decoration:underline;
+	color:#FFF;
+}
+.nscMessageBox input{
+	border-top:1px solid #333;
+	border-left:1px solid #333;
+	border-bottom:1px solid #999;
+	border-right:1px solid #999;
+	background-color:#333;
+	color:#FFF;
+}
+.nscMSGBoxToper{
+	width:100%;
+	margin:0px;
+	padding:0px;
+	font:3px tahoma;
+}
+.nscMSGBoxToperLeft{
+	float:left;
+	background-image:url('./Skins/default/corner3.gif');
+	background-repeat:no-repeat;
+	width:16px;
+	height:16px;
+}
+.nscMSGBoxToperPlus{
+	float:left;
+	width:268px;
+	height:16px;
+	background-color:#000;
+}
+.nscMSGBoxToperRight{
+	float:right;
+	background-image:url('./Skins/default/corner0.gif');
+	background-repeat:no-repeat;
+	width:16px;
+	height:16px;
+}
+.nscMSGBoxContainer{
+	clear:both;
+	background-color:#000;
+	width:100%;
+	color:#FFF;
+	overflow:hidden;
+}
+.nscMSGBoxInnerContainer{
+	background-color:#000;
+	margin-left:10px;
+	margin-right:0px;
+	font:12px tahoma;
+	width:96%;
+	word-break:break-all;
+	word-warp:break-word;
+	float:left;
+}
+.nscMSGBoxInnerTitle{
+	margin-left:10px;
+	margin-right:10px;
+	font:12px tahoma;
+	font-weight:bold;
+	float:left;
+}
+.nscMSGBoxInnerClose{
+	margin-left:10px;
+	margin-right:10px;
+	font:12px tahoma;
+	font-weight:bold;
+	float:right;
+	cursor:pointer;
+}
+.nscMSGBoxBottomer{
+	width:300px;
+	clear:both;
+	font:3px tahoma;
+}
+.nscMSGBoxBottomerLeft{
+	float:left;
+	background-image:url('./Skins/default/corner2.gif');
+	width:16px;
+	height:16px;
+}
+.nscMSGBoxBottomerPlus{
+	float:left;
+	width:268px;
+	height:16px;
+	background-color:#000;
+}
+.nscMSGBoxBottomerRight{
+	float:right;
+	background-image:url('./Skins/default/corner1.gif');
+	width:16px;
+	height:16px;
+	cursor:se-resize;
+}
+.nscInnerMusicViewInfo{
+	margin-top:14px;
+}
+.nscWebPlayerBtnDown{
+	width:74px;
+	height:31px;
+	background-image:url('./Skins/default/btndown.gif');
+	background-repeat:no-repeat;
+	float:right;
+	margin-top:16px;
+	cursor:pointer;
+}
+.nscWebPlayerBtnPrint{
+	width:74px;
+	height:31px;
+	background-image:url('./Skins/default/btnprint.gif');
+	background-repeat:no-repeat;
+	background-position:left bottom;
+	float:right;
+	margin-top:16px;
+	margin-right:10px;
+	cursor:pointer;
+}
+.nscProcessingBar{
+	background-image:url('./Skins/default/processingbar.gif');
+	width:16px;
+	height:16px;
+	float:left;
+}
+.nscAppIcon{
+	width:16px;
+	height:16px;
+	cursor:pointer;
+}
+.clearline{
+	width:100%;
+	height:1px;
+	font:1px tahoma;
+	clear:both;
+}
