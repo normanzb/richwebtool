@@ -10,6 +10,12 @@ function nscPageInit(){
 	head.appendChild(styleLink);
 	document.getElementById("nscCSS").href="./nscStyle.css";
 
+	isIE = new Boolean();
+	isIE = document.all?true:false;
+	//∆» πIEª∫¥ÊÕº∆¨
+	if (isIE)
+		document.execCommand("BackgroundImageCache",false,true);
+	
 	nscDefineElements();
 	nscWithEvents();
 	nscPageLoad();
@@ -21,8 +27,6 @@ function nscDefineElements(){
 	if (typeof(nsgPlayGround) != "object"){nsgPlayGround = document.getElementById("nsgPlayGround");}
 	if (typeof(nscDebugBox) != "object"){nscDebugBox = document.getElementById("nsgDebug");}
 	nsgMapInit();
-	isIE = new Boolean();
-	isIE = document.all?true:false;
 	debugThread = new nscThread("nscDebug()",10);
 	debugThread.reg("debugThread");
 }
