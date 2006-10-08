@@ -1,4 +1,4 @@
-//½ÇÉ«Àà imgPerson Í¼Æ¬Í·Ãû pgObject Ğè²åÈëµÄHTML¶ÔÏó
+ï»¿//è§’è‰²ç±» imgPerson å›¾ç‰‡å¤´å pgObject éœ€æ’å…¥çš„HTMLå¯¹è±¡
 function rollPerson(namePerson,imgPerson,imgWidth,imgHeight,perPosX,perPosY,pgObject,hitPolygons){
 	this.imgRP = document.createElement("div");
 	this.imgRP.style.display = "none";
@@ -224,7 +224,7 @@ rollPerson.prototype.faceto=function(imgSPosX,imgSPosY){
 rollPerson.prototype.acHitTest=function(hitPolygons,nPointX,nPointY,fixSW){
 	var i = new Number();var posArray;var fLine = new Number();var testResult = new Boolean;
 	i=0;posArray = hitPolygons[0]["sharps"];testResult=true;
-	//Îó²îĞŞÕı É¾³ı2:32 PM 9/24/2006 Ö»ÅĞ¶Ï½ÅÏÂÒ»¸öµã
+	//è¯¯å·®ä¿®æ­£ åˆ é™¤2:32 PM 9/24/2006 åªåˆ¤æ–­è„šä¸‹ä¸€ä¸ªç‚¹
 	//var fixValueX = 5;
 	//var fixValueY = 7
 	//if (String(fixSW).split("")[0] == "1") nPointX = nPointX + fixValueX;
@@ -261,7 +261,7 @@ rollPerson.prototype.acHitTest=function(hitPolygons,nPointX,nPointY,fixSW){
 	}
 	return testResult;
 }
-//µØÍ¼Àà
+//åœ°å›¾ç±»
 function mapScence(imgScence,pgObject){
 	pgObject.style.backgroundImage="url(" +imgScence + ")";
 	this.polygons=[ 
