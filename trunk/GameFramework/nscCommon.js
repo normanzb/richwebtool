@@ -1,8 +1,8 @@
-window.onload=nscPageInit;
-//³õÊ¼»¯º¯Êı
+ï»¿window.onload=nscPageInit;
+//åˆå§‹åŒ–å‡½æ•°
 function nscPageInit(){
 	
-	//×Ô¶¯¼ÓÈëCSS
+	//è‡ªåŠ¨åŠ å…¥CSS
 	head=document.getElementsByTagName("head").item(0);
 	styleLink = document.createElement("link");
 	styleLink.setAttribute("id","nscCSS");
@@ -12,7 +12,7 @@ function nscPageInit(){
 
 	isIE = new Boolean();
 	isIE = document.all?true:false;
-	//ÆÈÊ¹IE»º´æÍ¼Æ¬
+	//è¿«ä½¿IEç¼“å­˜å›¾ç‰‡
 	if (isIE)
 		document.execCommand("BackgroundImageCache",false,true);
 	
@@ -21,7 +21,7 @@ function nscPageInit(){
 	nscPageLoad();
 }
 //********************************************
-//ÍøÒ³ÔªËØ¶¨Òå¿ªÊ¼
+//ç½‘é¡µå…ƒç´ å®šä¹‰å¼€å§‹
 function nscDefineElements(){
 	threadCounter = 0;
 	if (typeof(nsgPlayGround) != "object"){nsgPlayGround = document.getElementById("nsgPlayGround");}
@@ -30,7 +30,7 @@ function nscDefineElements(){
 	debugThread = new nscThread("nscDebug()",10);
 	debugThread.reg("debugThread");
 }
-//ÊÂ¼ş°ó¶¨
+//äº‹ä»¶ç»‘å®š
 function nscWithEvents(){
 	//var keyCallBack = isIE?nsgPlayGround:window
 	//Change to listen whole window
@@ -42,21 +42,21 @@ function nscWithEvents(){
 		nsgSetKeyStatus(e,'release')
 		}
 }
-//ÏÈÖ´ĞĞº¯Êı
+//å…ˆæ‰§è¡Œå‡½æ•°
 function nscPageLoad(){
 	nsgDeadWhile();
 }
-//ÓÎÏ·ÓÃÑ­»·º¯Êı
+//æ¸¸æˆç”¨å¾ªç¯å‡½æ•°
 function nsgDeadWhile(){
 	nsgDeadWhileFunc();
 	setTimeout(nsgDeadWhile,1);
 }
-//Ñ­»·¾ßÌå´úÂëº¯Êı
+//å¾ªç¯å…·ä½“ä»£ç å‡½æ•°
 function nsgDeadWhileFunc(){
 	nscMainThread();
 	Player1.move(window.keyUp,window.keyLeft,window.keyRight,window.keyDown);
 }
-//ÉèÖÃ°´¼ü×´Ì¬
+//è®¾ç½®æŒ‰é”®çŠ¶æ€
 function nsgSetKeyStatus(e,ac){
 	var keyStatus = new Boolean();
 	if (ac == "press"){keyStatus=true;}
@@ -78,7 +78,7 @@ function nsgSetKeyStatus(e,ac){
 
 	numDPT = numPT - numLPT;
 	numLPT = numPT;
-	//¼ì²âÊÇ·ñÎªÍ¬Ê±°´¼ü
+	//æ£€æµ‹æ˜¯å¦ä¸ºåŒæ—¶æŒ‰é”®
 	if (!isIE)event=e;
 	if (event.keyCode ==  65)
 		window.keyLeft = keyStatus;
