@@ -2,7 +2,7 @@
 <nscConfig>
 	<AppSettings>
 		<Waiting value="0" />
-		<PreLoad value="true" />
+		<PreLoad value="false" />
 		<showSideBar value="true" />
 	</AppSettings>
 	<WebTools>		

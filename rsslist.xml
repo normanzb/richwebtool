@@ -1,6 +1,7 @@
 ﻿<nscwidgets>
 	<trees name="Root">
 		<tree name="Norman's Non-no Web" value="">
+			<tree name="Google Reader" value="http://www.google.com/reader/public/atom/user/12491643196426108115/state/com.google/broadcast" />
 			<tree name="Articles" value="http://eroman.org/feed.asp?t=" />
 			<tree name="猥琐时间" value="http://eroman.org/feed.asp?cat=2" />
 			<tree name="废品回收" value="http://eroman.org/feed.asp?cat=1" />

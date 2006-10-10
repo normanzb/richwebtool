@@ -1,5 +1,5 @@
 ﻿//Code by norman shinn http://eroman.org .Do not remove this line thankyou.//
-//1:38 2006-6-15
+//Last modify at 12:01 PM 10/10/2006
 //通用函数列表
 //jsLoader(jspath) JS读取器
 //cssLoader(cssname,csspath,csstype) CSS读取器
@@ -226,7 +226,9 @@ function getPosition(timeout){
 	setTimeout("getPosition(" + timeout + ")",1000);
 }
 
-//
+/*=======================================================Recontrustion Begin==================================
+Name space: nsc
+*/
 var nsc = new Object();
 nsc.Layout = new Object();
 nsc.Layout.CSS = function(){
@@ -283,15 +285,44 @@ nsc.CommonFunc.disableSelect=function(_domobj){
 nsc.CommonFunc.enableSelect=function(_domobj){
 	
 }
+/*
+<summary>
+<namespace>nsc.Events</namespace>
+<function>selectNodes</function>
+<type>static</type>
+<feature>Cross-browser XPath support</feature>
+</summary>
+*/
 nsc.Events=new Object();
 nsc.Events.eventlist =  new Object();
 nsc.Events.OnMouseDown = "onmousedown";
 nsc.Events.OnMouseUp="onmouseup";
+nsc.Events.OnUnLoad="onunload";
+/*
+<summary>
+<namespace>nsc.Events</namespace>
+<function>Event</function>
+<type>object</type>
+<feature>
+DOMObject: The DOM is going to be listened;
+EventName: string, "onmousedown" or "onmouseup", generally we use the enum nsc.Events.OnMouseDown and nsc.Events.OnMouseUp instead;
+CallBack: A function to call back;
+</feature>
+</summary>
+*/
 nsc.Events.Event = function(){
 	this.DOMObject =  new Object();
 	this.EventName = new String();
 	this.CallBack = new Object();
 }
+/*
+<summary>
+<namespace>nsc.Events</namespace>
+<function>AddEventHandler</function>
+<type>static</type>
+<feature>Events observer</feature>
+</summary>
+*/
 nsc.Events.AddEventHandler = function(_event){
 	this._event = _event;
 	switch(_event.EventName.toLowerCase()){
@@ -302,6 +333,10 @@ nsc.Events.AddEventHandler = function(_event){
 		case nsc.Events.OnMouseUp:
 			nsc.Events.PushToEventList(_event);
 			_event.DOMObject.onmouseup=nsc.Events.EventHandlerRouter.call(this);
+			break;
+		case nsc.Events.OnUnLoad:
+			nsc.Events.PushToEventList(_event);
+			_event.DOMObject.onunload=nsc.Events.EventHandlerRouter.call(this);
 			break;
 		default:
 			return false;
@@ -388,7 +423,28 @@ nsc.System.callBacker=function(_m,_c){
 		method.call(context);
 	}
 }
+/* 
+<summary>
+<namespace>nsc.Data</namespace>
+<feature>Support data connection</feature>
+</summary>
+*/
+nsc.Data = new Object();
+/* 
+<summary>
+<namespace>nsc.XML</namespace>
+<feature>Support XML operations</feature>
+</summary>
+*/
 nsc.XML = new Object();
+/*
+<summary>
+<namespace>nsc.XML</namespace>
+<function>selectNodes</function>
+<type>static</type>
+<feature>Cross-browser XPath support</feature>
+</summary>
+*/
 nsc.XML.selectNodes=function(_expression,_xmldoc){
 	if (IE){
 		return _xmldoc.selectNodes(_expression);
@@ -404,7 +460,21 @@ nsc.XML.selectNodes=function(_expression,_xmldoc){
 		return t2;
 	}
 }
+/*
+<summary>
+<namespace>nsc.Widgets</namespace>
+<feature>provide rich web widgets</feature>
+</summary>
+*/
 nsc.Widgets = new Object();
+/*
+<summary>
+<namespace>nsc.Widgets</namespace>
+<function>tree</function>
+<type>class</type>
+<feature>Cross-browser tree widget</feature>
+</summary>
+*/
 nsc.Widgets.tree = function(_xmldoc){
 	var xd = _xmldoc;
 	this.rootNode = new Object();
@@ -430,7 +500,7 @@ nsc.Widgets.tree.prototype = {
 		
 	}
 }
-
+//=========================================================Recontrustion End==================================
 function getCSSSelector(_cssref,_selector){
 	var i=0;
 			while (i < _cssref.length){
