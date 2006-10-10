@@ -430,6 +430,13 @@ nsc.System.callBacker=function(_m,_c){
 </summary>
 */
 nsc.Data = new Object();
+nsc.Data.Feed = new Object();
+nsc.Data.Feed.RSSAdapter = function(){
+	
+}
+nsc.Data.Feed.AtomAdapter = function(){
+	
+}
 /* 
 <summary>
 <namespace>nsc.XML</namespace>
