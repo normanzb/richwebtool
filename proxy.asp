@@ -4,13 +4,13 @@ Session.CodePage = "65001" ;
 Response.contentType="text/xml" ;
 Response.Expires = 0 ;
 
-var oUrl=new String(Request.QueryString);//"http://localhost/nscwebplayercaster/caster.asmx/PlayList";
+var oUrl=Request.QueryString("url").Count == 0?new String(Request.QueryString):new String(Request("url"));
 var oMethod=new String(Request.Form) ==  "undefined"?"GET":"POST";
 var oPosted=oMethod == "GET" || new String(Request.Form) == ""?null:new String(Request.Form) + "";
 var oContentType = Request.ServerVariables("CONTENT_TYPE");
 var xmldoc=Server.CreateObject("Microsoft.Xmlhttp"); 
 if (oUrl.indexOf("http://") != 0){
-	exm("非法的URL");	
+	exm("非法的URL:" + oUrl);	
 }
 try{
 	xmldoc.open(oMethod,oUrl,false);

@@ -48,7 +48,7 @@ nsc.RSSReader.prototype={
 		if (this.aggregatorURI != "" && this.aggregatorURI != null)
 			this.xhr = new XMLRequest(this.aggregatorURI,"GET",null,null,true,this.loadListData,_this);
 		else
-			this.xhrforrss = new XMLRequest(AppPath + "/proxy.asp?" + this.feedURI,"POST",null,null,true,this.loadRSSData,_this);
+			this.xhrforrss = new XMLRequest(AppPath + "/proxy.asp?url=" + this.feedURI,"POST",null,null,true,this.loadRSSData,_this);
 		
 	},
 	loadListData:function(){
@@ -67,7 +67,7 @@ nsc.RSSReader.prototype={
 					tempNode[i].onclick=function(){
 						reader.parent.feedURI = this.getAttribute("src");
 						reader.parent.rebuild("","<div class=\"nscProcessingBar\"></div>&nbsp; Loading Data...");
-						reader.parent.xhrforrss = new XMLRequest(AppPath + "/proxy.asp?" + reader.parent.feedURI,"POST",null,null,true,reader.parent.loadRSSData,reader.parent);
+						reader.parent.xhrforrss = new XMLRequest(AppPath + "/proxy.asp?url=" + reader.parent.feedURI,"POST",null,null,true,reader.parent.loadRSSData,reader.parent);
 					}
 					tempNode[i].style.cursor="pointer";
 				}
@@ -79,7 +79,7 @@ nsc.RSSReader.prototype={
 					break;
 				}
 			}
-			this.xhrforrss = new XMLRequest(AppPath + "/proxy.asp?" + this._self.feedURI,"POST",null,null,true,this._self.loadRSSData,this._self);
+			this.xhrforrss = new XMLRequest(AppPath + "/proxy.asp?url=" + this._self.feedURI,"POST",null,null,true,this._self.loadRSSData,this._self);
 		}
 		else{
 			r = document.createTextNode("数据读取错误,请检查网络。");
