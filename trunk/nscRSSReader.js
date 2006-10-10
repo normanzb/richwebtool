@@ -1,9 +1,9 @@
-﻿//15:25 2006-6-13
+﻿//Last modify at 12:01 PM 10/10/2006
 function nscRSSReaderPageInit(){
 	if(document.getElementById("nscRSSReader") == null){
 		IRSSReader = new nsc.RSSReader();
 		IRSSReader.getself(IRSSReader);
-		IRSSReader.aggregatorURI="/nscWebTools/rsslist.xml";
+		IRSSReader.aggregatorURI="/richWebTools/rsslist.xml";
 		IRSSReader.feedURI=""//"/nscWebTools/proxy.asp?http://eroman.org/feed.asp?t="
 		IRSSReader.PageInit();
 	}
