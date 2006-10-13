@@ -431,10 +431,50 @@ nsc.System.callBacker=function(_m,_c){
 */
 nsc.Data = new Object();
 nsc.Data.Feed = new Object();
-nsc.Data.Feed.RSSAdapter = function(){
+nsc.Data.Feed.RSS = function(){
+	this.Channel = new Object();
+	this.Channel.Title = "";
+	this.Channel.Link = "";
+	this.Channel.Description = "";
+	this.Channel.Language = "";
+	this.Channel.Copyright = "";
+	this.Channel.pubDate = new Date();//GMT
+	this.Channel.lastBuildDate = "";//localized string
+	this.Channel.webMaster = "";
+	this.Channel.Generator = "";
+	this.Channel.ttl=new Number();
 	
+	this.items = new Object();
+	this.items.count = new Number(0);
 }
-nsc.Data.Feed.AtomAdapter = function(){
+nsc.Data.Feed.RSS.prototype ={
+	addItems:function(item){
+		this.items[this.items.count] = item;
+		this.items.count++;
+	}
+}
+/*
+<summary>
+<namespace>nsc.Data.Feed.RSS</namespace>
+<function>item</function>
+<type>enum</type>
+<feature>rss item</feature>
+</summary>
+*/
+nsc.Data.Feed.RSS.item = function(){
+		this.Title = "";
+		this.Link = "";
+		this.Category = "";
+		this.Author = "";
+		this.pubDate = new Date();//GMT:Date When this post publish
+		this.datePosted = "";//localized string indicate when this post publish
+		this.Description = "";
+		this.commentRSS = "";
+}
+nsc.Data.Feed.RSSAdapter = function(xmldoc){
+	xmldoc.getE
+}
+nsc.Data.Feed.AtomAdapter = function(xmldoc){
 	
 }
 /* 
