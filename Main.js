@@ -444,13 +444,13 @@ nsc.Data.Feed.RSS = function(){
 	this.Channel.Generator = "";
 	this.Channel.ttl=new Number();
 	
-	this.items = new Object();
-	this.items.count = new Number(0);
+	this.Channel.items = new Object();
+	this.Channel.items.count = new Number(0);
 }
 nsc.Data.Feed.RSS.prototype ={
 	addItems:function(item){
-		this.items[this.items.count] = item;
-		this.items.count++;
+		this.Channel.items[this.items.count] = item;
+		this.Channel.items.count++;
 	}
 }
 /*
@@ -472,7 +472,11 @@ nsc.Data.Feed.RSS.item = function(){
 		this.commentRSS = "";
 }
 nsc.Data.Feed.RSSAdapter = function(xmldoc){
-	xmldoc.getE
+	var tRss = new nsc.Data.Feed.RSS();
+	var _channel = nsc.XML.selectNodes("//channel",xmldoc);
+	tRss.Channel.Title = _channel[0].getElementsByTagName("title")[0].text;
+	return tRss;
+	//return _channel;
 }
 nsc.Data.Feed.AtomAdapter = function(xmldoc){
 	
