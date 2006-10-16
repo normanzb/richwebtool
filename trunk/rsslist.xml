@@ -1,7 +1,7 @@
 ﻿<nscwidgets>
 	<trees name="Root">
 		<tree name="Norman's Non-no Web" value="">
-			<tree name="Google Reader" value="http://www.google.com/reader/public/atom/user/12491643196426108115/state/com.google/broadcast" />
+			<tree name="Google Reader" value="http://www.google.com/reader/public/atom/user/12491643196426108115/label/shared" />
 			<tree name="Articles" value="http://eroman.org/feed.asp" />
 			<tree name="猥琐时间" value="http://eroman.org/feed.asp?cat=2" />
 			<tree name="废品回收" value="http://eroman.org/feed.asp?cat=1" />
@@ -14,14 +14,14 @@
 			<tree name="某阿姨" value="http://blog.sina.com.cn/myblog/index_rss.php?uid=1212268092" />
 			<tree name="Anti" value="http://feeds.feedburner.com/blog-city/anti" />
 			<tree name="七月" value="http://www.blogcn.com/rss2/chittyjuly.xml" />
-			<tree name="小倩" value="http://mayshen1985.spaces.msn.com/feed.rss" />
+			<tree name="小倩" value="http://mayshen1985.spaces.live.com/feed.rss" />
 			<tree name="旦旦" value="http://blogcup.com/sunflower/dandan0627/rss2.xml" />
 			<tree name="美女草" value="http://blogcup.com/a/hitograss/rss2.xml" />
 			<tree name="美女草Old" value="http://blogcup.com/sunflower/qq86954830/rss2.xml" />
 			<tree name="Adahong" value="http://www.kantoutou.com/adahong/feed.asp" />
 			<tree name="Gary" value="http://www.aspxer.net/feed.asp" />
 			<tree name="小伟格" value="http://wolfgang-mittermeyer.spaces.msn.com/feed.rss" />
-			<tree name="兎子" value="http://saturn1012.spaces.msn.com/feed.rss" />
+			<tree name="兎子" value="http://saturn1012.spaces.live.com/feed.rss" />
 			<tree name="Mobbyca" value="http://www.fighteden.net/blog/index.php/feed/" />
 			<tree name="-镜中界-" value="http://www.sheepowner.co.uk/blog/blog.cgi?t=rss2" />
 			<tree name="Sync" value="http://blog.5d.cn/service/rss10.asp?uid=2545" />
@@ -30,7 +30,7 @@
 			<tree name="小蓝哥" value="http://www.kantoutou.com/skyblue/feed.asp" />
 			<tree name="摇" value="http://blogcup.com/b2/29650/rss2.xml" />
 			<tree name="蓝星的43" value="http://my.opera.com/XSK/xml/rss/blog/" />
-			<tree name="小梗哥" value="http://ks2.rjjd.com/blog/feed.asp" />
+			<tree name="小梗哥" value="http://www.actiontom.net/feed.asp" />
 		</tree>
 		<tree name="SXNA">
 			<tree name="B面" value="http://eroman.org/sxna/feed.asp?cateID=2" />

@@ -1,7 +1,7 @@
 ﻿//Last modify at 12:01 PM 10/10/2006
 function nscRSSReaderPageInit(){
 	if(document.getElementById("nscRSSReader") == null){
-		IRSSReader = new nsc.RSSReader();
+		IRSSReader = new nsc.Widgets.RSSReader("tempRSSReaderGUIDBlocker");
 		IRSSReader.getself(IRSSReader);
 		IRSSReader.aggregatorURI="/richWebTools/rsslist.xml";
 		IRSSReader.feedURI=""//"/nscWebTools/proxy.asp?http://eroman.org/feed.asp?t="
@@ -9,13 +9,14 @@ function nscRSSReaderPageInit(){
 	}
 }
 
-nsc.RSSReader=function(){
+nsc.Widgets.RSSReader=function(guid){
+	this.GUID = guid;
 	this.feedURI = new String();
 	this.aggregatorURI = new String();
 	this._self = new Object();
 	this.box = new Object();
 }
-nsc.RSSReader.prototype={
+nsc.Widgets.RSSReader.prototype={
 	getself:function(_obj){
 		this._self = _obj;
 	},
@@ -48,7 +49,7 @@ nsc.RSSReader.prototype={
 		if (this.aggregatorURI != "" && this.aggregatorURI != null)
 			this.xhr = new XMLRequest(this.aggregatorURI,"GET",null,null,true,this.loadListData,_this);
 		else
-			this.xhrforrss = new XMLRequest(AppPath + "/proxy.asp?url=" + this.feedURI,"POST",null,null,true,this.loadRSSData,_this);
+			this.xhrforrss = new XMLRequest(AppPath + "/proxy.asp?url=" + this.feedURI,"GET","text/xml",null,true,this.loadRSSData,_this);
 		
 	},
 	loadListData:function(){
@@ -89,16 +90,19 @@ nsc.RSSReader.prototype={
 	loadRSSData:function(){
 		this._self = this.parent;
 		var xd = this.http_request.responseXML;
-		if (xd.getElementsByTagName("rss").length > 0){
-			var items = xd.getElementsByTagName("item");
-			var t = xd.getElementsByTagName("title")[0].firstChild.nodeValue;
-			var r = new String();
-			for (var i = 0 ; i < items.length ; i++){
-				r = r + "<div style=\"border-bottom:1px solid #666;width:90%;overflow:hidden;height:16px;padding-top:2px;\"><strong><a href=\"" + items[i].getElementsByTagName("link")[0].firstChild.nodeValue + "\" style=\"text-decoration:none;\" target=\"rssreader\">" + items[i].getElementsByTagName("title")[0].firstChild.nodeValue + "</a></strong> [Category:" + (items[i].getElementsByTagName("category").length > 0?items[i].getElementsByTagName("category")[0].firstChild.nodeValue:"") + " Author:" + items[i].getElementsByTagName("author")[0].firstChild.nodeValue + "]</div><div style=\"width:90%;overflow:hidden;padding:10px;\">" + items[i].getElementsByTagName("description")[0].firstChild.nodeValue + "</div>";
+		var t,r;
+		try{
+			var tFeed=nsc.Data.Feed.RSSAdapter(xd);
+			t = tFeed.Channel.Title;
+			r = "<div id=\"" + this.parent.GUID + "_contentContainer\">";
+			for (var i = 0 ; i < tFeed.Channel.items.length ; i++){
+				r = r + "<div style=\"border-bottom:1px solid #666;width:90%;overflow:hidden;height:16px;padding-top:2px;\"><strong><a href=\"" + tFeed.Channel.items[i].Link + "\" style=\"text-decoration:none;\" target=\"rssreader\">" + tFeed.Channel.items[i].Title + "</a></strong> [Category:" + tFeed.Channel.items[i].Category + " Author:" + tFeed.Channel.items[i].Author + "]</div><div style=\"width:90%;overflow:hidden;padding:10px;\">" + tFeed.Channel.items[i].Description + "</div>";
 			}
+			r = r + "</div>";
 		}
-		else{
-			r = "无法获取正确的RSS数据，请检查网络连接。";
+		catch(ex){
+			t = ex.name;
+			r = ex.message;
 		}
 		this._self.rebuild(t,r);
 	},
@@ -107,6 +111,9 @@ nsc.RSSReader.prototype={
 		//this.box.content = "<div name=\"nscRSSReaderList\" style=\"float:left\"></div><div name=\"nscRSSReaderContent\" style=\"float:left\"></div>";
 		//" + _content + "
 		//this.box.rebuild();
+		if (document.getElementById(this.GUID + "_contentContainer")){
+			document.getElementById(this.GUID + "_contentContainer").parentNode.removeChild(document.getElementById(this.GUID + "_contentContainer"));
+		}
 		document.getElementById(this.box.id + "Title").innerHTML = this.box.title;
 		document.getElementById(this.box.id + "InnerContainer").childNodes[0].childNodes[1].innerHTML = _content;
 		
