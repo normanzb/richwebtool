@@ -431,6 +431,9 @@ nsc.System.callBacker=function(_m,_c){
 */
 nsc.Data = new Object();
 nsc.Data.Feed = new Object();
+nsc.Data.Feed.getNodeValue=function(elements){
+	return elements.length > 0?nsc.XML.Element.text(elements[0]):"";
+}
 /*
 <summary>
 <namespace>nsc.Data.Feed.RSS</namespace>
@@ -501,27 +504,27 @@ nsc.Data.Feed.RSSAdapter = function(xmldoc){
 	if (_items.length < 1){
 		throw {message:"Corrupted Feed",name:"XMLFormat Exception"};//Could not be throw because unknown reason.
 	}
-	tRss.Channel.Title = _channel[0].getElementsByTagName("title").length > 0?_channel[0].getElementsByTagName("title")[0].firstChild.nodeValue:"";
-	tRss.Channel.Link = _channel[0].getElementsByTagName("link").length > 0?_channel[0].getElementsByTagName("link")[0].firstChild.nodeValue:"";
-	tRss.Channel.Description = _channel[0].getElementsByTagName("description").length > 0 && _channel[0].getElementsByTagName("description")[0].hasChildNodes()?_channel[0].getElementsByTagName("description")[0].firstChild.nodeValue:"";
-	tRss.Channel.Language = _channel[0].getElementsByTagName("language").length > 0?_channel[0].getElementsByTagName("language")[0].firstChild.nodeValue:"";
-	tRss.Channel.Copyright = _channel[0].getElementsByTagName("copyright").length > 0?_channel[0].getElementsByTagName("copyright")[0].firstChild.nodeValue:"";
+	tRss.Channel.Title = nsc.Data.Feed.getNodeValue(_channel[0].getElementsByTagName("title"));
+	tRss.Channel.Link = nsc.Data.Feed.getNodeValue(_channel[0].getElementsByTagName("link"));
+	tRss.Channel.Description = nsc.Data.Feed.getNodeValue(_channel[0].getElementsByTagName("description"));
+	tRss.Channel.Language = nsc.Data.Feed.getNodeValue(_channel[0].getElementsByTagName("language"));
+	tRss.Channel.Copyright = nsc.Data.Feed.getNodeValue(_channel[0].getElementsByTagName("copyright"));
 	tRss.Channel.pubDate = _channel[0].getElementsByTagName("pubDate").length > 0?new Date(_channel[0].getElementsByTagName("pubDate")[0].firstChild.nodeValue):false;
-	tRss.Channel.lastBuildDate = _channel[0].getElementsByTagName("lastBuildDate").length > 0?_channel[0].getElementsByTagName("lastBuildDate")[0].firstChild.nodeValue:(tRss.Channel.pubDate != false?tRss.Channel.pubDate.toString():"");
-	tRss.Channel.webMaster = _channel[0].getElementsByTagName("webMaster").length > 0 && _channel[0].getElementsByTagName("webMaster")[0].hasChildNodes()?_channel[0].getElementsByTagName("webMaster")[0].firstChild.nodeValue:"";
-	tRss.Channel.Generator = _channel[0].getElementsByTagName("generator").length > 0 && _channel[0].getElementsByTagName("generator")[0].hasChildNodes()?_channel[0].getElementsByTagName("generator")[0].firstChild.nodeValue:"";
-	tRss.Channel.ttl = _channel[0].getElementsByTagName("ttl").length > 0?_channel[0].getElementsByTagName("ttl")[0].firstChild.nodeValue:"";
+	tRss.Channel.lastBuildDate = nsc.Data.Feed.getNodeValue(_channel[0].getElementsByTagName("lastBuildDate"));
+	tRss.Channel.webMaster = nsc.Data.Feed.getNodeValue(_channel[0].getElementsByTagName("webMaster"));
+	tRss.Channel.Generator = nsc.Data.Feed.getNodeValue(_channel[0].getElementsByTagName("generator"));
+	tRss.Channel.ttl = nsc.Data.Feed.getNodeValue(_channel[0].getElementsByTagName("ttl"));
 	var i,_titem;
 	for(i = 0;i < _items.length; i++){
 		_titem = new nsc.Data.Feed.RSS.item();
-		_titem.Title = _items[i].getElementsByTagName("title").length > 0?_items[i].getElementsByTagName("title")[0].firstChild.nodeValue:"";
-		_titem.Link = _items[i].getElementsByTagName("link").length > 0?_items[i].getElementsByTagName("link")[0].firstChild.nodeValue:"";
-		_titem.Category = _items[i].getElementsByTagName("category").length > 0 && _items[i].getElementsByTagName("category")[0].hasChildNodes?_items[i].getElementsByTagName("category")[0].firstChild.nodeValue:"";
-		_titem.Author = _items[i].getElementsByTagName("author").length > 0?_items[i].getElementsByTagName("author")[0].firstChild.nodeValue:"";
+		_titem.Title = nsc.Data.Feed.getNodeValue(_items[i].getElementsByTagName("title"));
+		_titem.Link = nsc.Data.Feed.getNodeValue(_items[i].getElementsByTagName("link"));
+		_titem.Category = nsc.Data.Feed.getNodeValue(_items[i].getElementsByTagName("category"));
+		_titem.Author = nsc.Data.Feed.getNodeValue(_items[i].getElementsByTagName("author"));
 		_titem.pubDate = _items[i].getElementsByTagName("pubDate").length > 0?new Date(_items[i].getElementsByTagName("pubDate")[0].firstChild.nodeValue):false;
-		_titem.datePosted = _items[i].getElementsByTagName("datePosted").length > 0?_items[i].getElementsByTagName("datePosted")[0].firstChild.nodeValue:(_titem.pubDate != false?_titem.pubDate.toString():"");
-		_titem.Description = _items[i].getElementsByTagName("description").length > 0?_items[i].getElementsByTagName("description")[0].firstChild.nodeValue:"";
-		_titem.commentRSS = _items[i].getElementsByTagName("wfw:commentRss").length > 0?_items[i].getElementsByTagName("wfw:commentRss")[0].firstChild.nodeValue:"";
+		_titem.datePosted = nsc.Data.Feed.getNodeValue(_items[i].getElementsByTagName("datePosted"));
+		_titem.Description = nsc.Data.Feed.getNodeValue(_items[i].getElementsByTagName("description"));
+		_titem.commentRSS = nsc.Data.Feed.getNodeValue(_items[i].getElementsByTagName("wfw:commentRss"))
 		_titem.mediaContentURL = _items[i].getElementsByTagName("media:content").length > 0?_items[i].getElementsByTagName("media:content")[0].getAttribute("url"):"";
 		tRss.addItem(_titem);
 	}
@@ -559,6 +562,10 @@ nsc.XML.selectNodes=function(_expression,_xmldoc){
 		}
 		return t2;
 	}
+}
+nsc.XML.Element=new Object();
+nsc.XML.Element.text=function(element){
+	return element && element.hasChildNodes()? element.firstChild.nodeValue:"";
 }
 /*
 <summary>
