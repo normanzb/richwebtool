@@ -8,7 +8,7 @@ function nscPageInit(){
 	styleLink.setAttribute("id","nscCSS");
 	styleLink.setAttribute("rel","stylesheet");
 	head.appendChild(styleLink);
-	document.getElementById("nscCSS").href="./nscStyle.css";
+	document.getElementById("nscCSS").href="./nscGFStyle.css";
 
 	isIE = new Boolean();
 	isIE = document.all?true:false;
