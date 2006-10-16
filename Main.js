@@ -383,7 +383,7 @@ nsc.Effect.fade=function(_obj,_from,_to,_speed,_step){
 nsc.Effect.fade.prototype={
 	fadeIn:function(){
 		this.upordown=1;
-		this.op = this.from;
+		this.op = typeof this.op == "undefined"?this.from:this.op;
 		this.up();
 	},
 	up:function(){
@@ -398,7 +398,7 @@ nsc.Effect.fade.prototype={
 	},
 	fadeOut:function(){
 		this.upordown=2;
-		this.op = this.to;
+		this.op = typeof this.op == "undefined"?this.to:this.op;
 		this.down();
 	},
 	down:function(){
@@ -431,6 +431,14 @@ nsc.System.callBacker=function(_m,_c){
 */
 nsc.Data = new Object();
 nsc.Data.Feed = new Object();
+/*
+<summary>
+<namespace>nsc.Data.Feed.RSS</namespace>
+<function>item</function>
+<type>class</type>
+<feature>really simple syndication class</feature>
+</summary>
+*/
 nsc.Data.Feed.RSS = function(){
 	this.Channel = new Object();
 	this.Channel.Title = "";
@@ -438,19 +446,19 @@ nsc.Data.Feed.RSS = function(){
 	this.Channel.Description = "";
 	this.Channel.Language = "";
 	this.Channel.Copyright = "";
-	this.Channel.pubDate = new Date();//GMT
+	this.Channel.pubDate = false;//GMT
 	this.Channel.lastBuildDate = "";//localized string
 	this.Channel.webMaster = "";
 	this.Channel.Generator = "";
 	this.Channel.ttl=new Number();
 	
 	this.Channel.items = new Object();
-	this.Channel.items.count = new Number(0);
+	this.Channel.items.length = new Number(0);
 }
 nsc.Data.Feed.RSS.prototype ={
-	addItems:function(item){
-		this.Channel.items[this.items.count] = item;
-		this.Channel.items.count++;
+	addItem:function(item){
+		this.Channel.items[this.Channel.items.length] = item;
+		this.Channel.items.length++;
 	}
 }
 /*
@@ -462,21 +470,62 @@ nsc.Data.Feed.RSS.prototype ={
 </summary>
 */
 nsc.Data.Feed.RSS.item = function(){
-		this.Title = "";
-		this.Link = "";
-		this.Category = "";
-		this.Author = "";
-		this.pubDate = new Date();//GMT:Date When this post publish
-		this.datePosted = "";//localized string indicate when this post publish
-		this.Description = "";
-		this.commentRSS = "";
+	this.Title = "";
+	this.Link = "";
+	this.Category = "";
+	this.Author = "";
+	this.pubDate = false;//GMT:Date When this post publish
+	this.datePosted = "";//localized string indicate when this post publish
+	this.Description = "";
+	this.commentRSS = "";
+	this.mediaContentURL = "";
 }
+/*
+<summary>
+<namespace>nsc.Data.Feed.RSSAdapter</namespace>
+<function>item</function>
+<type>static</type>
+<feature>Serialize a RSS formatted XML file into nsc.Data.Feed.RSS object</feature>
+</summary>
+*/
 nsc.Data.Feed.RSSAdapter = function(xmldoc){
 	var tRss = new nsc.Data.Feed.RSS();
+	if (xmldoc.getElementsByTagName("rss").length < 1){
+		throw {message:"Not a RSS2 formatted document",name:"XMLFormat Exception"};//Exception could not be throw because unknown reason.
+	}
 	var _channel = nsc.XML.selectNodes("//channel",xmldoc);
-	tRss.Channel.Title = _channel[0].getElementsByTagName("title")[0].text;
+	if (_channel.length < 1){
+		throw {message:"Corrupted Feed",name:"XMLFormat Exception"};//Exception could not be throw because unknown reason.
+	}
+	var _items = nsc.XML.selectNodes("//item",xmldoc);
+	if (_items.length < 1){
+		throw {message:"Corrupted Feed",name:"XMLFormat Exception"};//Could not be throw because unknown reason.
+	}
+	tRss.Channel.Title = _channel[0].getElementsByTagName("title").length > 0?_channel[0].getElementsByTagName("title")[0].firstChild.nodeValue:"";
+	tRss.Channel.Link = _channel[0].getElementsByTagName("link").length > 0?_channel[0].getElementsByTagName("link")[0].firstChild.nodeValue:"";
+	tRss.Channel.Description = _channel[0].getElementsByTagName("description").length > 0 && _channel[0].getElementsByTagName("description")[0].hasChildNodes()?_channel[0].getElementsByTagName("description")[0].firstChild.nodeValue:"";
+	tRss.Channel.Language = _channel[0].getElementsByTagName("language").length > 0?_channel[0].getElementsByTagName("language")[0].firstChild.nodeValue:"";
+	tRss.Channel.Copyright = _channel[0].getElementsByTagName("copyright").length > 0?_channel[0].getElementsByTagName("copyright")[0].firstChild.nodeValue:"";
+	tRss.Channel.pubDate = _channel[0].getElementsByTagName("pubDate").length > 0?new Date(_channel[0].getElementsByTagName("pubDate")[0].firstChild.nodeValue):false;
+	tRss.Channel.lastBuildDate = _channel[0].getElementsByTagName("lastBuildDate").length > 0?_channel[0].getElementsByTagName("lastBuildDate")[0].firstChild.nodeValue:(tRss.Channel.pubDate != false?tRss.Channel.pubDate.toString():"");
+	tRss.Channel.webMaster = _channel[0].getElementsByTagName("webMaster").length > 0 && _channel[0].getElementsByTagName("webMaster")[0].hasChildNodes()?_channel[0].getElementsByTagName("webMaster")[0].firstChild.nodeValue:"";
+	tRss.Channel.Generator = _channel[0].getElementsByTagName("generator").length > 0 && _channel[0].getElementsByTagName("generator")[0].hasChildNodes()?_channel[0].getElementsByTagName("generator")[0].firstChild.nodeValue:"";
+	tRss.Channel.ttl = _channel[0].getElementsByTagName("ttl").length > 0?_channel[0].getElementsByTagName("ttl")[0].firstChild.nodeValue:"";
+	var i,_titem;
+	for(i = 0;i < _items.length; i++){
+		_titem = new nsc.Data.Feed.RSS.item();
+		_titem.Title = _items[i].getElementsByTagName("title").length > 0?_items[i].getElementsByTagName("title")[0].firstChild.nodeValue:"";
+		_titem.Link = _items[i].getElementsByTagName("link").length > 0?_items[i].getElementsByTagName("link")[0].firstChild.nodeValue:"";
+		_titem.Category = _items[i].getElementsByTagName("category").length > 0 && _items[i].getElementsByTagName("category")[0].hasChildNodes?_items[i].getElementsByTagName("category")[0].firstChild.nodeValue:"";
+		_titem.Author = _items[i].getElementsByTagName("author").length > 0?_items[i].getElementsByTagName("author")[0].firstChild.nodeValue:"";
+		_titem.pubDate = _items[i].getElementsByTagName("pubDate").length > 0?new Date(_items[i].getElementsByTagName("pubDate")[0].firstChild.nodeValue):false;
+		_titem.datePosted = _items[i].getElementsByTagName("datePosted").length > 0?_items[i].getElementsByTagName("datePosted")[0].firstChild.nodeValue:(_titem.pubDate != false?_titem.pubDate.toString():"");
+		_titem.Description = _items[i].getElementsByTagName("description").length > 0?_items[i].getElementsByTagName("description")[0].firstChild.nodeValue:"";
+		_titem.commentRSS = _items[i].getElementsByTagName("wfw:commentRss").length > 0?_items[i].getElementsByTagName("wfw:commentRss")[0].firstChild.nodeValue:"";
+		_titem.mediaContentURL = _items[i].getElementsByTagName("media:content").length > 0?_items[i].getElementsByTagName("media:content")[0].getAttribute("url"):"";
+		tRss.addItem(_titem);
+	}
 	return tRss;
-	//return _channel;
 }
 nsc.Data.Feed.AtomAdapter = function(xmldoc){
 	
@@ -568,9 +617,11 @@ function areaFollow(e){
 }
 function hsArea(){
 	if (!(new Number(nscUIArea.style.left.replace("px","")) < 2 && new Number(nscUIArea.style.left.replace("px","")) > -2)){
+		nscCommonVar.opMSB.goback();
 		showArea(-_areawidth);
 	}
 	else{
+		nscCommonVar.opMSB.goroot();
 		hideArea(_areax);
 	}
 }
@@ -972,8 +1023,8 @@ function nscMSBMouseDown(evt){
 		t=t.parentNode;
 		ti++;
 	}
+	t.msb.goroot();//Change out of the scope below, because sidebar events changed.
 	if (nscCommonVar.opMSB != t.msb){
-		t.msb.goroot();
 		nscCommonVar.opMSB.goback();
 		nscCommonVar.opMSB=t.msb;
 	}
