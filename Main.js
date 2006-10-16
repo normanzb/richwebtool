@@ -431,6 +431,14 @@ nsc.System.callBacker=function(_m,_c){
 */
 nsc.Data = new Object();
 nsc.Data.Feed = new Object();
+/*
+<summary>
+<namespace>nsc.Data.Feed</namespace>
+<function>getNodeValue</function>
+<type>static</type>
+<feature>Cross-browser and return null as ""</feature>
+</summary>
+*/
 nsc.Data.Feed.getNodeValue=function(elements){
 	return elements.length > 0?nsc.XML.Element.text(elements[0]):"";
 }

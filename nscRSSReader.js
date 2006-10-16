@@ -61,9 +61,15 @@ nsc.Widgets.RSSReader.prototype={
 			var reader =  this;
 			var tempNode = new Array();
 			for(var i  = 0;i<t.length;i++){
+				var temStrong=document.createElement("strong")
 				tempNode[i] = document.createElement("div");
 				tempNode[i].setAttribute("src",t[i].getAttribute("value"));
-				tempNode[i].appendChild(document.createTextNode(t[i].getAttribute("name")));
+				if (t[i].getAttribute("value") == null || t[i].getAttribute("value") == ""){
+					temStrong.innerHTML =t[i].getAttribute("name");
+					tempNode[i].appendChild(temStrong);
+				}
+				else
+					tempNode[i].appendChild(document.createTextNode(t[i].getAttribute("name")));
 				if (t[i].getAttribute("value") != null && t[i].getAttribute("value") != ""){
 					tempNode[i].onclick=function(){
 						reader.parent.feedURI = this.getAttribute("src");
