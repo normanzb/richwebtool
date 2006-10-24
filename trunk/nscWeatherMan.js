@@ -1,5 +1,5 @@
 ﻿//Code by norman shinn http://eroman.org .Do not remove this line thankyou.//
-MSNWeatherURL="http://localhost/nscWebTools/TestWeather.xml"//"http://weather.msn.com/RSS.aspx?wealocations=wc:CHXX0008&weadegreetype=C"; //设置MSN天气预报RSS地址
+MSNWeatherURL="http://localhost/richWebTools/TestWeather.xml"//"http://weather.msn.com/RSS.aspx?wealocations=wc:CHXX0008&weadegreetype=C"; //设置MSN天气预报RSS地址
 function nscWeatherManPageInit(){
 	if(document.getElementById("nscWeatherMan") == null){
 		IWeatherMan = new nscWeatherMan();
