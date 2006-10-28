@@ -174,9 +174,9 @@ function URISticker(oUrl){//贴票函数
         if (oUrl.lastIndexOf("?") + 1 == oUrl.length)
         	oUrl = oUrl + nscTimeStamp();
         else if (oUrl.lastIndexOf("?") != -1)
-        		 oUrl = oUrl + "&" + nscTimeStamp();
+        		 oUrl = oUrl + "&nscts=" + nscTimeStamp();
         	 else
-        	 	 oUrl = oUrl + "?" + nscTimeStamp();
+        	 	 oUrl = oUrl + "?nscts" + nscTimeStamp();
        	return oUrl
 }
 
