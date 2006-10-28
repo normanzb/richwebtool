@@ -2,4 +2,4 @@ t = new XMLRequest("./FeedSample/rss_lbs.xml","GET",null,"text/xml",false,functi
 try{t = new XMLRequest("./FeedSample/xspf_odeo.xml","GET",null,"text/xml",false,function(){sss=nsc.Data.Feed.RSSAdapter(this.http_request.responseXML);a=1},null)}catch(e){Logger.debug(e)}
 
 /proxy.asp?url=http://blog.sina.com.cn/myblog/index_rss.php?uid=1212268092&59511-15102006
-t = new XMLRequest("./FeedSample/rss_feedburner.xml","GET",null,"text/xml",false,function(){sss=nsc.Data.Feed.RSSAdapter(this.http_request.responseXML);a=1},null)
+t = new XMLRequest("http://api.flickr.com/services/feeds/photos_public.gne?id=55295799@N00&format=rss_200","GET",null,"text/xml",false,function(){sss=nsc.Data.Feed.RSSAdapter(this.http_request.responseXML);a=1},null)

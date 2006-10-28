@@ -176,7 +176,7 @@ function URISticker(oUrl){//贴票函数
         else if (oUrl.lastIndexOf("?") != -1)
         		 oUrl = oUrl + "&nscts=" + nscTimeStamp();
         	 else
-        	 	 oUrl = oUrl + "?nscts" + nscTimeStamp();
+        	 	 oUrl = oUrl + "?nscts=" + nscTimeStamp();
        	return oUrl
 }
 
