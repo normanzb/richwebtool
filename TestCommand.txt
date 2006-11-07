@@ -3,3 +3,15 @@ try{t = new XMLRequest("./FeedSample/xspf_odeo.xml","GET",null,"text/xml",false,
 
 /proxy.asp?url=http://blog.sina.com.cn/myblog/index_rss.php?uid=1212268092&59511-15102006
 t = new XMLRequest("http://api.flickr.com/services/feeds/photos_public.gne?id=55295799@N00&format=rss_200","GET",null,"text/xml",false,function(){sss=nsc.Data.Feed.RSSAdapter(this.http_request.responseXML);a=1},null)
+hs = function(HelloString){t = new XMLRequest("./proxy.asp?url=http://guest1.meebo.org/mm","POST",HelloString,"text/xml",false,function(){rx=this.http_request.responseXML;rt=this.http_request.responseText},null)}
+
+Jabber handShake:
+
+<body xml:lang="en" to="guest1.meebo.org" wait="30" hold="1" content="text/xml; charset=utf-8" rid="5409533321" xmlns="http://jabber.org/protocol/httpbind" />
+<body sid="2130546787545214786" rid="5409533322" xmlns="http://jabber.org/protocol/httpbind"><iq xmlns="jabber:client" type="set" id="A01"><query xmlns="jabber:iq:auth"><username>normanzbmeebme773005</username><resource>meebome</resource><password>mm</password></query></iq></body>
+<body sid="2130546787545214786" rid="5409533323" xmlns="http://jabber.org/protocol/httpbind"><presence from="normanzbmeebme773005@guest1.meebo.org/meebome" xmlns="jabber:client"><nick xmlns="http://jabber.org/protocol/nick">normanzb</nick></presence><presence group="IM" type="subscribe" to="normanzb@meebo.org" from="normanzbmeebme773005@guest1.meebo.org/meebome" xmlns="jabber:client"><nick xmlns="http://jabber.org/protocol/nick">normanzb</nick></presence><iq id="v1" type="set"><vCard xmlns="vcard-temp"><DESC>4</DESC></vCard></iq></body>
+<body xmlns="http://jabber.org/protocol/httpbind"/>
+<body sid="2130546787545214786" rid="5409533343" xmlns="http://jabber.org/protocol/httpbind"><iq id="v1" type="set"><vCard xmlns="vcard-temp"><DESC>350</DESC></vCard></iq></body> / increase <DESC> 23 per send
+Send Message:
+<body sid="2130546787545214786" rid="5409533349" xmlns="http://jabber.org/protocol/httpbind"><message xmlns="jabber:client" type="chat" from="normanzbmeebme773005@guest1.meebo.org/meebome" to="normanzb@meebo.org"><body>This is a test from nsc js framework</body><nick xmlns="http://jabber.org/protocol/nick">normanzb</nick></message></body>
+<body sid="2189489481232376973" rid="2651619223" xmlns="http://jabber.org/protocol/httpbind"><message xmlns="jabber:client" type="chat" from="normanzbmeebme773005@guest1.meebo.org/meebome" to="normanzb@meebo.org"><body>This is a test from nsc js framework</body><nick xmlns="http://jabber.org/protocol/nick">normanzb</nick></message></body>
