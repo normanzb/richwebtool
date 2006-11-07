@@ -5,10 +5,11 @@ Response.contentType="text/xml" ;
 Response.Expires = 0 ;
 
 var oUrl=Request.QueryString("url").Count == 0?new String(Request.QueryString):new String(Request.QueryString).replace("url=","").replace(/\&nscts\=.*/,"");
-var oMethod=new String(Request.Form) ==  "undefined"?"GET":"POST";
-var oPosted=oMethod == "GET" || new String(Request.Form) == ""?null:new String(Request.Form) + "";
+var oMethod=Request.ServerVariables("REQUEST_METHOD");
+var oPosted=Request.BinaryRead(Request.TotalBytes);
 var oContentType = Request.ServerVariables("CONTENT_TYPE");
 var xmldoc=Server.CreateObject("Microsoft.Xmlhttp"); 
+//Response.BinaryWrite(oPosted);
 if (oUrl.indexOf("http://") != 0){
 	exm("非法的URL:" + oUrl);	
 }

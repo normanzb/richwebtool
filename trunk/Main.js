@@ -287,6 +287,20 @@ nsc.CommonFunc.enableSelect=function(_domobj){
 }
 /*
 <summary>
+<namespace>nsc.CommonFunc</namespace>
+<function>encodeURI</function>
+<type>static</type>
+<feature>Cross-browser URI encoder</feature>
+</summary>
+*/
+nsc.CommonFunc.encodeURI=function(_url){
+	return window.encodeURI(_url);
+}
+nsc.CommonFunc.decodeURI=function(_url){
+	return window.decodeURI(_url);
+}
+/*
+<summary>
 <namespace>nsc.Events</namespace>
 <function>selectNodes</function>
 <type>static</type>
@@ -577,42 +591,43 @@ nsc.XML.Element.text=function(element){
 }
 /*
 <summary>
-<namespace>nsc.Widgets</namespace>
+<namespace>nsc.Component</namespace>
 <feature>provide rich web widgets</feature>
 </summary>
 */
-nsc.Widgets = new Object();
+nsc.Component = new Object();
 /*
 <summary>
-<namespace>nsc.Widgets</namespace>
+<namespace>nsc.Component</namespace>
 <function>tree</function>
 <type>class</type>
 <feature>Cross-browser tree widget</feature>
 </summary>
 */
-nsc.Widgets.tree = function(_xmldoc){
-	var xd = _xmldoc;
-	this.rootNode = new Object();
-	if (xd.getElementsByTagName("nscwidgets").length > 0){
-		var root = nsc.XML.selectNodes("/nscwidgets/trees",xd);
-		var trees = nsc.XML.selectNodes("/nscwidgets/trees/tree",xd);
-		alert(trees.length);
-		this.rootNode = document.createElement("div");
-		this.rootNode.appendChild(document.createTextNode(root[0].getAttribute("name")));
-		this.addToNode(this.rootNode,trees);
-		for (var i = 0;i < trees.length;i++){
-			if (trees[0].childNodes.length > 0){
-				
-			}
-		}
-	}
-	else{
-		return document.createTextNode("输入错误。")
-	}
+nsc.Component.tree = function(_guid){
+
 }
-nsc.Widgets.tree.prototype = {
-	addToNode:function(){
-		
+nsc.Component.tree.prototype = {
+	DataSource:new String(),
+	Generate:function(_xmldoc){
+			var xd = _xmldoc;
+			this.rootNode = new Object();
+			if (xd.getElementsByTagName("nscwidgets").length > 0){
+				var root = nsc.XML.selectNodes("/nscwidgets/trees",xd);
+				var trees = nsc.XML.selectNodes("/nscwidgets/trees/tree",xd);
+				alert(trees.length);
+				this.rootNode = document.createElement("div");
+				this.rootNode.appendChild(document.createTextNode(root[0].getAttribute("name")));
+				this.addToNode(this.rootNode,trees);
+				for (var i = 0;i < trees.length;i++){
+					if (trees[0].childNodes.length > 0){
+						
+					}
+				}
+			}
+			else{
+				return document.createTextNode("输入错误。")
+			}
 	}
 }
 //=========================================================Recontrustion End==================================
@@ -697,9 +712,9 @@ function XMLRequest(xUrl,xMethod,xDoc,xContentType,notShowWaiting,xCallBack,xCon
 			Logger.info("XMLRequest:" + xUrl);
         this.http_request.open(xMethod, xUrl, true);
         if (xContentType != null)
-			this.http_request.setRequestHeader("Content-Type",xContentType + ";charset=UTF-8");
+			this.http_request.setRequestHeader("Content-Type",xContentType) //+ ";charset=UTF-8"); this way is not standard
 		this.http_request.setRequestHeader("X-Referer",window.location);
-        this.http_request.send(encodeURI(xDoc));
+        this.http_request.send(xDoc);
         if (notShowWaiting == null || notShowWaiting == false)
         	showLoading();
         if (xCallBack == null)
