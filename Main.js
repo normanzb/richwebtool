@@ -595,6 +595,13 @@ nsc.XML.Element.text=function(element){
 <feature>provide rich web widgets</feature>
 </summary>
 */
+nsc.Widgets = new Object();
+/*
+<summary>
+<namespace>nsc.Component</namespace>
+<feature>provide rich web componet</feature>
+</summary>
+*/
 nsc.Component = new Object();
 /*
 <summary>
