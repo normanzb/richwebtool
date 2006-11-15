@@ -397,31 +397,35 @@ nsc.Effect.fade=function(_obj,_from,_to,_speed,_step){
 nsc.Effect.fade.prototype={
 	fadeIn:function(){
 		this.upordown=1;
-		this.op = typeof this.op == "undefined"?this.from:this.op;
+		this.op = typeof this.op == "undefined" || this.op == 0?this.from:this.op;
 		this.up();
 	},
 	up:function(){
-		if (this.op <= this.to && this.upordown == 1){
+		if (this.op + this.step<= this.to && this.upordown == 1){
+			this.op+=this.step;
 			if (IE)
-				this.obj.style.filter="alpha(opacity=" + this.op + ");";
+				this.obj.style.filter="alpha(opacity=" + new Number(this.op) + ");";
 			else
 				this.obj.style.opacity=Math.floor(this.op/10)/10;;
-			this.op+=this.step;
+			if (_DEBUG)
+				Logger.debug(typeof this.op + ":" + this.op + "[" + this.obj.id + ":" + this.obj.style.filter + "]");
 			setTimeout(nsc.System.callBacker(this.up,this),this.speed);
 		}
 	},
 	fadeOut:function(){
 		this.upordown=2;
-		this.op = typeof this.op == "undefined"?this.to:this.op;
+		this.op = typeof this.op == "undefined" || this.op == 0?this.to:this.op;
 		this.down();
 	},
 	down:function(){
-		if (this.op >= this.from && this.upordown == 2){
+		if (this.op - this.step>= this.from && this.upordown == 2){
+			this.op-=this.step;
 			if (IE)
-				this.obj.style.filter="alpha(opacity=" + this.op + ");";
+				this.obj.style.filter="alpha(opacity=" + new Number(this.op) + ");";
 			else
 				this.obj.style.opacity=Math.floor(this.op/10)/10;;
-			this.op-=this.step;
+			if (_DEBUG)
+				Logger.debug(typeof this.op + ":" + this.op + "[" + this.obj.id + "]");
 			setTimeout(nsc.System.callBacker(this.down,this),this.speed);
 		}
 	},
@@ -714,6 +718,7 @@ function XMLRequest(xUrl,xMethod,xDoc,xContentType,notShowWaiting,xCallBack,xCon
             alert('Giving up :( Cannot create an XMLHTTP instance');
             return "false";
         }
+        xUrl = xUrl.substring(0,4).toLowerCase() == "http"?"./proxy.asp?url=" + xUrl:xUrl;
 		xUrl=URISticker(xUrl);
 		if (_DEBUG)
 			Logger.info("XMLRequest:" + xUrl);
@@ -878,6 +883,7 @@ nscMessageBox.prototype.show=function(){
 			this.htmlBorder.setAttribute("id",this.id);
 			this.htmlBorder.msb=this._self;
 			this.htmlBorder.className="nscMessageBox";
+			this.htmlBorder.style.visibility="hidden";
 				var htmlToper=document.createElement("div");
 				htmlToper.className="nscMSGBoxToper";
 				htmlToper.setAttribute("id",this.id + "Toper");
@@ -949,8 +955,10 @@ nscMessageBox.prototype.show=function(){
 		this.htmlBorder.onmouseup=nscMSBMouseUp;
 		htmlInnerClose.onclick=nscMSBMouseClose;
 		htmlInnerHide.onclick=nscMSBMouseHide;
-	this.fader = new nsc.Effect.fade(this.htmlBorder,70,100);
+	this.fader = new nsc.Effect.fade(this.htmlBorder,0,100);
 	this.goroot();
+	this.htmlBorder.style.visibility="visible";
+	this.fader.from=70;
 }
 
 nscMessageBox.prototype.onresize=function(_func){
@@ -1079,7 +1087,8 @@ function nscMSBMouseUp(){
 }
 
 function nscMSBMouseClose(){
-	document.getElementById(nscCommonVar.opMSB.id).parentNode.removeChild(document.getElementById(nscCommonVar.opMSB.id));
+	nscCommonVar.opMSB.close();//Changed 3:44 PM 11/15/2006
+	//document.getElementById(nscCommonVar.opMSB.id).parentNode.removeChild(document.getElementById(nscCommonVar.opMSB.id));
 }
 
 function nscMSBMouseHide(){

@@ -17,7 +17,7 @@ try{
 	xmldoc.open(oMethod,oUrl,false);
 	if (oContentType != "")
 		xmldoc.setRequestHeader("Content-Type",oContentType);
-	xmldoc.send(oPosted); 
+	xmldoc.send(oMethod == "POST"?oPosted:null); 
 	Response.write(xmldoc.responseText);
 }
 catch(ex){
