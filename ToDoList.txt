@@ -1,5 +1,6 @@
-Complete RSS Reader
-Reader Rss podcast
-WeatherMan support FIREFOX1.5
-Embed StarDict
-Proxy support cache
+	Complete RSS Reader
+	Reader Rss podcast
+ x 	WeatherMan support FIREFOX1.5
+	Embed StarDict
+	Proxy support cache
+	Synchronization rss news(auto refresh)
