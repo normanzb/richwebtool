@@ -1,5 +1,6 @@
 ﻿<nscwidgets>
 	<trees name="Root">
+		<tree name="A Guide to Hell" value="http://eroman.org/blog/rss.xml" />
 		<tree name="Flickr" value="http://api.flickr.com/services/feeds/photos_public.gne?id=55295799@N00&amp;format=rss_200" />
 		<tree name="Goods" value="http://www.box.net/public/too3v7naay/rss.xml" />
 		<tree name="My Favor">
@@ -14,6 +15,8 @@
 			<tree name="[NoFun]Keso" value="http://feeds.feedburner.com/PlayinWithIt" />
 			<tree name="[NoFun]某阿姨" value="http://blog.sina.com.cn/myblog/index_rss.php?uid=1212268092" />
 			<tree name="[NoFun]Anti" value="http://feeds.feedburner.com/blog-city/anti" />
+			<tree name="[Fun]Channel 10" value="http://on10.net/feeds/rss/" />
+			<tree name="[Fun]Channel 9" value="http://channel9.msdn.com/rss.asp" />
 		</tree>
 		<tree name="Friends' Blog" value="">
 			<tree name="3333" value="http://my.opera.com/XSK/xml/rss/blog/" />

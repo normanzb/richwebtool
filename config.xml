@@ -7,10 +7,10 @@
 	</AppSettings>
 	<WebTools>		
 		<tool name="nscWebPlayer" type="Application" src="/nscWebPlayer.js" copyright="nscWebPlayer.about();" autoload="0" init="nscWebPlayerPageInit();" />
-		<tool name="nscWeatherMan" type="Application" src="/nscWeatherMan.js" copyright="nscWeatherMan.about();" autoload="0" init="nscWeatherManPageInit();" />
+		<tool name="nscWeatherMan" type="Application" src="/nscWeatherMan.js" copyright="nscWeatherMan.about();" autoload="1" init="nscWeatherManPageInit();" />
 		<!--<tool name="nscGoogleMapApi" type="Library" src="/nscGoogleMapLibV2.js" copyright="" autoload="1" init="" />
 		<tool name="nscGoogleMap" type="Application" src="/nscGoogleMap.js" copyright="nscGoogleMap.about();" autoload="0" init="nscGoogleMapPageInit();" />-->
 		<!--<tool name="nscHighLigher" type="Library" src="/nscHighLighter.js" copyright="" autoload="1" init="nscHighLigherPageInit();" />-->
-		<tool name="nscRSSReader" type="Application" src="/nscRSSReader.js" copyright="" autoload="0" init="nscRSSReaderPageInit();" />
+		<tool name="nscRSSReader" type="Application" src="/nscRSSReader.js" copyright="" autoload="1" init="nscRSSReaderPageInit();" />
 	</WebTools>
 </nscConfig>
