@@ -126,8 +126,7 @@ function loadJSInit(strjs){
 		eval(strjs);
 	}
 	catch(e){
-		if (_DEBUG)
-			Logger.error("组件错误",e.message);
+		nsc.System.Track("组件错误",e.message)
 		setTimeout("loadJSInit(\"" + strjs + "\")",1000);
 	}
 }
@@ -146,8 +145,7 @@ function jsLoader(jspath){//JS读取器
 		tmpobj.setAttribute("src",URISticker(jspath));
 		nscWorkArea.appendChild(tmpobj);
 		nscCommonVar.jslist.push(jspath);
-		if (_DEBUG)
-			Logger.info("jsLoader:" + URISticker(jspath));
+		nsc.System.Track("jsLoader:" + URISticker(jspath));
 	}
 }
 
@@ -161,8 +159,7 @@ function cssLoader(cssname,csspath,cssmedia){//CSS读取器
 		styleLink.setAttribute("media",cssmedia);
 	head.appendChild(styleLink);
 	document.getElementById(cssname).href=URISticker(csspath);
-	if (_DEBUG)
-		Logger.info("cssLoader:" + URISticker(csspath));
+	nsc.System.Track("cssLoader:" + URISticker(csspath));
 }
 
 function nscTimeStamp(){//时间戳
@@ -407,10 +404,10 @@ nsc.Effect.fade.prototype={
 				this.obj.style.filter="alpha(opacity=" + new Number(this.op) + ");";
 			else
 				this.obj.style.opacity=Math.floor(this.op/10)/10;;
-			if (_DEBUG)
-				Logger.debug(typeof this.op + ":" + this.op + "[" + this.obj.id + ":" + this.obj.style.filter + "]");
+			nsc.System.Track(typeof this.op + ":" + this.op + "[" + this.obj.id + ":" + this.obj.style.filter + "]");
 			setTimeout(nsc.System.callBacker(this.up,this),this.speed);
-		}
+		}else
+			this.onComplete();
 	},
 	fadeOut:function(){
 		this.upordown=2;
@@ -424,10 +421,13 @@ nsc.Effect.fade.prototype={
 				this.obj.style.filter="alpha(opacity=" + new Number(this.op) + ");";
 			else
 				this.obj.style.opacity=Math.floor(this.op/10)/10;;
-			if (_DEBUG)
-				Logger.debug(typeof this.op + ":" + this.op + "[" + this.obj.id + "]");
+			nsc.System.Track(typeof this.op + ":" + this.op + "[" + this.obj.id + "]");
 			setTimeout(nsc.System.callBacker(this.down,this),this.speed);
-		}
+		}else
+			this.onComplete();
+	},
+	onComplete:function(){
+	
 	},
 	toString:function(){
 		return "nsc.Effect.fade";
@@ -439,6 +439,14 @@ nsc.System.callBacker=function(_m,_c){
 	var context = _c;
 	return function(){
 		method.call(context);
+	}
+}
+nsc.System.Track = function(_message,_error){
+	if (_DEBUG){
+		if (_error != null)
+			Logger.error(_message,_error);
+		else
+			Logger.debug(_message);
 	}
 }
 /* 
@@ -720,8 +728,7 @@ function XMLRequest(xUrl,xMethod,xDoc,xContentType,notShowWaiting,xCallBack,xCon
         }
         xUrl = xUrl.substring(0,4).toLowerCase() == "http"?"./proxy.asp?url=" + xUrl:xUrl;
 		xUrl=URISticker(xUrl);
-		if (_DEBUG)
-			Logger.info("XMLRequest:" + xUrl);
+		nsc.System.Track("XMLRequest:" + xUrl);
         this.http_request.open(xMethod, xUrl, true);
         if (xContentType != null)
 			this.http_request.setRequestHeader("Content-Type",xContentType) //+ ";charset=UTF-8"); this way is not standard
@@ -867,6 +874,7 @@ function nscMessageBox(box){
 		else{
 			this.sys=false;
 		}
+		this.alpha = 70;
 		this.resizefunc=new Function();
 }
 
@@ -958,7 +966,7 @@ nscMessageBox.prototype.show=function(){
 	this.fader = new nsc.Effect.fade(this.htmlBorder,0,100);
 	this.goroot();
 	this.htmlBorder.style.visibility="visible";
-	this.fader.from=70;
+	this.fader.from=this.alpha;
 }
 
 nscMessageBox.prototype.onresize=function(_func){
@@ -1003,7 +1011,12 @@ nscMessageBox.prototype.goback=function(){
 	//alert(this.id);
 	//this.zindex="10001";
 	//this.setstyle();
-	this.fader.fadeOut();
+	if (this.fader.op - this.fader.step < this.fader.from){
+		this.fader.to = this.alpha;
+		this.fader.onComplete= function(){this.to = 100;this.onComplete=new Function("");}
+	}
+	else
+		this.fader.fadeOut();
 }
 
 nscMessageBox.prototype.rebuild=function(){//根据MessageBox的属性重建

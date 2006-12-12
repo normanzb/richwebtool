@@ -235,7 +235,7 @@ function SendSOAPDataToCaster(){
 		ErrMess("URL未填写");
 		return;
 	}
-	if (!_url.match(/http:\/\/.+\.\w+\/.+\.(mp3|wma|mid|midi)\b/ig)){
+	if (!_url.match(/http:\/\/.+\/.+\.(mp3|wma|mid|midi)\b/ig)){
 		ErrMess("歌曲格式不正确");
 		return;
 	}
