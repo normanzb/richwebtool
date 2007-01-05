@@ -354,17 +354,25 @@ nsc.Events.AddEventHandler = function(_event){
 	}
 }
 nsc.Events.PushToEventList = function(_event){
-	if (nsc.Events.eventlist[_event.DOMObject] == null){
-		nsc.Events.eventlist[_event.DOMObject]=new Object();
+	//nsc.System.Track(_event.DOMObject.tagName + ":" + _event.DOMObject + "_" + );
+	//nsc.Events.eventlist[document][nsc.Events.OnMouseDown].length
+	if (nsc.Events.eventlist[_event.EventName.toLowerCase()] == null){
+		nsc.Events.eventlist[_event.EventName.toLowerCase()] = new Object();
 	}
-	if (nsc.Events.eventlist[_event.DOMObject][_event.EventName.toLowerCase()] == null){
-		nsc.Events.eventlist[_event.DOMObject][_event.EventName.toLowerCase()]=new Array();
+	if (nsc.Events.eventlist[_event.EventName.toLowerCase()]["Owner"] == null){
+		nsc.Events.eventlist[_event.EventName.toLowerCase()]["Owner"] = new Array();
 	}
-	nsc.Events.eventlist[_event.DOMObject][_event.EventName.toLowerCase()][nsc.Events.eventlist[_event.DOMObject][_event.EventName.toLowerCase()].length]=_event.CallBack;
+	if (nsc.Events.eventlist[_event.EventName.toLowerCase()]["Method"] == null){
+		nsc.Events.eventlist[_event.EventName.toLowerCase()]["Method"] = new Array();
+	}
+	nsc.Events.eventlist[_event.EventName.toLowerCase()]["Method"][nsc.Events.eventlist[_event.EventName.toLowerCase()]["Method"].length] = _event.CallBack;
+	nsc.Events.eventlist[_event.EventName.toLowerCase()]["Owner"][nsc.Events.eventlist[_event.EventName.toLowerCase()]["Owner"].length] = _event.DOMObject;
 }
 nsc.Events.EventCallBacker=function(_context,_event,_windowevent){
-	for(var i = 0;i <nsc.Events.eventlist[_event.DOMObject][_event.EventName].length;i++){
-		nsc.Events.eventlist[_event.DOMObject][_event.EventName][i].call(_context,_windowevent);
+	for(var i = 0;i < nsc.Events.eventlist[_event.EventName]["Method"].length;i++){
+		if (nsc.Events.eventlist[_event.EventName]["Owner"][i] == _event.DOMObject){
+			nsc.Events.eventlist[_event.EventName]["Method"][i].call(_context,_windowevent);
+		}
 	}
 }
 nsc.Events.EventHandlerRouter=function(){
