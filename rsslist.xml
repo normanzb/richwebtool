@@ -16,7 +16,7 @@
 			<tree name="[NoFun]某阿姨" value="http://blog.sina.com.cn/myblog/index_rss.php?uid=1212268092" />
 			<tree name="[NoFun]Anti" value="http://feeds.feedburner.com/blog-city/anti" />
 			<tree name="[Fun]Channel 10" value="http://on10.net/feeds/rss/" />
-			<tree name="[Fun]Channel 9" value="http://channel9.msdn.com/rss.asp" />
+			<tree name="[Fun]Channel 9" value="http://channel9.msdn.com/rss.aspx" />
 		</tree>
 		<tree name="Friends' Blog" value="">
 			<tree name="3333" value="http://my.opera.com/XSK/xml/rss/blog/" />
