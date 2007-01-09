@@ -19,8 +19,9 @@ window.onload=nscPageInit;
 function nscPageInit(){
 	//自动加入CSS
 	cssLoader("nscCSS",AppPath + "nscStyle.css");
-
-	IE=document.all?true:false;
+	
+	nsc.System.BrowserDetect.init();
+	IE=nsc.System.BrowserDetect.browser == "Explorer"?true:false;
 	nscDefineElements();
 	nscWithEvents();
 	nscPageLoad();
@@ -306,6 +307,8 @@ nsc.CommonFunc.decodeURI=function(_url){
 */
 nsc.Events=new Object();
 nsc.Events.eventlist =  new Object();
+nsc.Events.OnMouseOver="onmouseover";
+nsc.Events.OnMouseOut="onmouseout";
 nsc.Events.OnMouseDown = "onmousedown";
 nsc.Events.OnMouseUp="onmouseup";
 nsc.Events.OnUnLoad="onunload";
@@ -337,6 +340,14 @@ nsc.Events.Event = function(){
 nsc.Events.AddEventHandler = function(_event){
 	this._event = _event;
 	switch(_event.EventName.toLowerCase()){
+		case nsc.Events.OnMouseOver:
+			nsc.Events.PushToEventList(_event);
+			_event.DOMObject.onmouseover=nsc.Events.EventHandlerRouter.call(this);
+			break;
+		case nsc.Events.OnMouseOut:
+			nsc.Events.PushToEventList(_event);
+			_event.DOMObject.onmouseout=nsc.Events.EventHandlerRouter.call(this);
+			break;
 		case nsc.Events.OnMouseDown:
 			nsc.Events.PushToEventList(_event);
 			_event.DOMObject.onmousedown=nsc.Events.EventHandlerRouter.call(this);
@@ -457,6 +468,110 @@ nsc.System.Track = function(_message,_error){
 			Logger.debug(_message);
 	}
 }
+nsc.System.BrowserDetect = {
+	init: function () {
+		this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
+		this.version = this.searchVersion(navigator.userAgent)
+			|| this.searchVersion(navigator.appVersion)
+			|| "an unknown version";
+		this.OS = this.searchString(this.dataOS) || "an unknown OS";
+	},
+	searchString: function (data) {
+		for (var i=0;i<data.length;i++)	{
+			var dataString = data[i].string;
+			var dataProp = data[i].prop;
+			this.versionSearchString = data[i].versionSearch || data[i].identity;
+			if (dataString) {
+				if (dataString.indexOf(data[i].subString) != -1)
+					return data[i].identity;
+			}
+			else if (dataProp)
+				return data[i].identity;
+		}
+	},
+	searchVersion: function (dataString) {
+		var index = dataString.indexOf(this.versionSearchString);
+		if (index == -1) return;
+		return parseFloat(dataString.substring(index+this.versionSearchString.length+1));
+	},
+	dataBrowser: [
+		{ 	string: navigator.userAgent,
+			subString: "OmniWeb",
+			versionSearch: "OmniWeb/",
+			identity: "OmniWeb"
+		},
+		{
+			string: navigator.vendor,
+			subString: "Apple",
+			identity: "Safari"
+		},
+		{
+			prop: window.opera,
+			identity: "Opera"
+		},
+		{
+			string: navigator.vendor,
+			subString: "iCab",
+			identity: "iCab"
+		},
+		{
+			string: navigator.vendor,
+			subString: "KDE",
+			identity: "Konqueror"
+		},
+		{
+			string: navigator.userAgent,
+			subString: "Firefox",
+			identity: "Firefox"
+		},
+		{
+			string: navigator.vendor,
+			subString: "Camino",
+			identity: "Camino"
+		},
+		{		// for newer Netscapes (6+)
+			string: navigator.userAgent,
+			subString: "Netscape",
+			identity: "Netscape"
+		},
+		{
+			string: navigator.userAgent,
+			subString: "MSIE",
+			identity: "Explorer",
+			versionSearch: "MSIE"
+		},
+		{
+			string: navigator.userAgent,
+			subString: "Gecko",
+			identity: "Mozilla",
+			versionSearch: "rv"
+		},
+		{ 		// for older Netscapes (4-)
+			string: navigator.userAgent,
+			subString: "Mozilla",
+			identity: "Netscape",
+			versionSearch: "Mozilla"
+		}
+	],
+	dataOS : [
+		{
+			string: navigator.platform,
+			subString: "Win",
+			identity: "Windows"
+		},
+		{
+			string: navigator.platform,
+			subString: "Mac",
+			identity: "Mac"
+		},
+		{
+			string: navigator.platform,
+			subString: "Linux",
+			identity: "Linux"
+		}
+	]
+
+};
 /* 
 <summary>
 <namespace>nsc.Data</namespace>
@@ -882,15 +997,24 @@ function nscMessageBox(box){
 		else{
 			this.sys=false;
 		}
+		if (box.hidden != null && typeof box.hidden == "boolean"){
+			this.hidden=box.hidden;
+		}
+		else{
+			this.hidden=false;
+		}
+		//defualt opacity when messagebox blured.
 		this.alpha = 70;
+		//defualt opacity when messagebox highlighted.
+		this.opacity = 100;
+		this.titleHtmlObj;
 		this.resizefunc=new Function();
 }
 
 nscMessageBox.prototype.getself=function(self){
 	this._self=self;
 }
-
-nscMessageBox.prototype.show=function(){
+nscMessageBox.prototype.open=function(){
 	if (document.getElementById(this.id) != null){
 		document.getElementById(this.id).parentNode.removeChild(document.getElementById(this.id));
 	}
@@ -915,10 +1039,10 @@ nscMessageBox.prototype.show=function(){
 				var htmlContainer=document.createElement("div");
 				htmlContainer.setAttribute("id",this.id + "Container");
 				htmlContainer.className="nscMSGBoxContainer";
-				var htmlInnerTitle=document.createElement("div");
-				htmlInnerTitle.setAttribute("id",this.id + "Title");
-				htmlInnerTitle.className="nscMSGBoxInnerTitle";
-				htmlInnerTitle.innerHTML=this.title;
+				this.htmlInnerTitle=document.createElement("div");
+				this.htmlInnerTitle.setAttribute("id",this.id + "Title");
+				this.htmlInnerTitle.className="nscMSGBoxInnerTitle";
+				this.htmlInnerTitle.innerHTML=this.title;
 				var htmlInnerHide=document.createElement("div");
 				htmlInnerHide.setAttribute("id",this.id + "Hide");
 				htmlInnerHide.className="nscMSGBoxInnerClose";
@@ -935,7 +1059,7 @@ nscMessageBox.prototype.show=function(){
 				this.htmlInnerContainer.className="nscMSGBoxInnerContainer";
 				this.htmlInnerContainer.innerHTML=this.content;
 				if (this.sys==false){
-					htmlContainer.appendChild(htmlInnerTitle);
+					htmlContainer.appendChild(this.htmlInnerTitle);
 					htmlContainer.appendChild(htmlInnerClose);
 					//Modify at 4.24.06 
 					//htmlContainer.appendChild(htmlInnerHide);
@@ -975,8 +1099,19 @@ nscMessageBox.prototype.show=function(){
 	this.goroot();
 	this.htmlBorder.style.visibility="visible";
 	this.fader.from=this.alpha;
+	this.hidden=false;
 }
-
+nscMessageBox.prototype.show=function(){
+	if (document.getElementById(this.id) == null){
+		this.open();
+	}
+	this.hidden=false;
+	this.rebuild();
+}
+nscMessageBox.prototype.hide=function(){
+	this.hidden=true;
+	this.rebuild();
+}
 nscMessageBox.prototype.onresize=function(_func){
 	var _func = _func;
 	this.resizefunc = function(){_func.call(this);}
@@ -1003,6 +1138,12 @@ nscMessageBox.prototype.setstyle=function(){
 	if (this.scrollY != null)
 		this.htmlBorder.childNodes[1].childNodes[2].style.overflowY = this.scrollY;
 	this.htmlBorder.style.zIndex=this.zindex;
+	
+	//show and hide
+	if (this.hidden == true)
+		this.htmlBorder.style.display="none";
+	else
+		this.htmlBorder.style.display="block";
 }
 
 nscMessageBox.prototype.goroot=function(){
@@ -1012,6 +1153,8 @@ nscMessageBox.prototype.goroot=function(){
 		nscCommonVar.zIndex[0]+=1;
 	this.zindex=nscCommonVar.zIndex[0];
 	this.setstyle();
+	//Set fader.to to default value to prevent when user set alpha to 0 and then invoke goback funtion twice, fader.to value will be set to 0.
+	this.fader.to = this.opacity;
 	this.fader.fadeIn();
 }
 
@@ -1019,6 +1162,7 @@ nscMessageBox.prototype.goback=function(){
 	//alert(this.id);
 	//this.zindex="10001";
 	//this.setstyle();
+	//This logical is to prevent when two MessageBox opened as the same time both of them will have 100% opacity.The blured one should be set to this.alpha
 	if (this.fader.op - this.fader.step < this.fader.from){
 		this.fader.to = this.alpha;
 		this.fader.onComplete= function(){this.to = 100;this.onComplete=new Function("");}
@@ -1028,8 +1172,9 @@ nscMessageBox.prototype.goback=function(){
 }
 
 nscMessageBox.prototype.rebuild=function(){//根据MessageBox的属性重建
+	this.setstyle();
 	this.htmlInnerContainer.innerHTML=this.content;
-	this.htmlBorder.childNodes[1].childNodes[0].innerHTML=this.title;
+	this.htmlInnerTitle.innerHTML=this.title;
 }
 
 nscMessageBox.prototype.close=function(){

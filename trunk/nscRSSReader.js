@@ -76,7 +76,8 @@ nsc.Widgets.RSSReader.prototype={
 						reader.parent.rebuild("","<div class=\"nscProcessingBar\"></div>&nbsp; Loading Data...");
 						reader.parent.xhrforrss = new XMLRequest(reader.parent.feedURI,"GET",null,null,true,reader.parent.loadRSSData,reader.parent);
 					}
-					tempNode[i].style.cursor="pointer";
+					if (nsc.System.BrowserDetect.version >= 7)
+						tempNode[i].style.cursor="pointer";
 				}
 				r.appendChild(tempNode[i]);
 			}
