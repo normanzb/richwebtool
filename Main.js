@@ -307,6 +307,7 @@ nsc.CommonFunc.decodeURI=function(_url){
 */
 nsc.Events=new Object();
 nsc.Events.eventlist =  new Object();
+nsc.Events.OnMouseMove="onmousemove";
 nsc.Events.OnMouseOver="onmouseover";
 nsc.Events.OnMouseOut="onmouseout";
 nsc.Events.OnMouseDown = "onmousedown";
@@ -340,6 +341,10 @@ nsc.Events.Event = function(){
 nsc.Events.AddEventHandler = function(_event){
 	this._event = _event;
 	switch(_event.EventName.toLowerCase()){
+		case nsc.Events.OnMouseMove:
+			nsc.Events.PushToEventList(_event);
+			_event.DOMObject.onmousemove=nsc.Events.EventHandlerRouter.call(this);
+			break;
 		case nsc.Events.OnMouseOver:
 			nsc.Events.PushToEventList(_event);
 			_event.DOMObject.onmouseover=nsc.Events.EventHandlerRouter.call(this);
@@ -572,6 +577,35 @@ nsc.System.BrowserDetect = {
 	]
 
 };
+nsc.System.Environment = {
+	ScrollLeft:function(){
+		var left = 0;
+		if (nsc.System.BrowserDetect.browser == "Explorer" && nsc.System.BrowserDetect.version > 5.5)
+			left = document.documentElement.scrollLeft;
+		else
+			left = document.body.scrollLeft;
+		return left;
+	},
+	ScrollTop:function(){
+		var top = 0;
+		if (nsc.System.BrowserDetect.browser == "Explorer" && nsc.System.BrowserDetect.version > 5.5)
+			top = document.documentElement.scrollTop;
+		else
+			top = document.body.scrollTop;
+		return top;
+	}
+};
+nsc.System.Element = {
+	DisableSelect : nsc.CommonFunc.disableSelect,
+	EnableSelect : nsc.CommonFunc.enableSelect
+};
+nsc.System.Element.Style=new Object();
+nsc.System.Element.Style.PositionFixed=function(element){
+	if (nsc.System.BrowserDetect.browser == "Explorer" && nsc.System.BrowserDetect.version == "7")
+		element.style.position="fixed";
+	else
+		element.style.position="absolute";
+}
 /* 
 <summary>
 <namespace>nsc.Data</namespace>
