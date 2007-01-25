@@ -593,6 +593,22 @@ nsc.System.Environment = {
 		else
 			top = document.body.scrollTop;
 		return top;
+	},
+	BodyClientWidth:function(){
+		var clientWidth = 0;
+		if (nsc.System.BrowserDetect.browser == "Explorer" && nsc.System.BrowserDetect.version > 5.5)
+			clientWidth = document.documentElement.clientWidth;
+		else
+			clientWidth = document.body.clientWidth;
+		return clientWidth;
+	},
+	BodyClientHeight:function(){
+		var clientHeight = 0;
+		if (nsc.System.BrowserDetect.browser == "Explorer" && nsc.System.BrowserDetect.version > 5.5)
+			clientHeight = document.documentElement.clientHeight;
+		else
+			clientHeight = document.body.clientHeight;
+		return clientHeight;
 	}
 };
 nsc.System.Element = {
@@ -1151,7 +1167,10 @@ nscMessageBox.prototype.onresize=function(_func){
 	this.resizefunc = function(){_func.call(this);}
 }
 
-
+nscMessageBox.prototype.getstyle=function(){
+	this.width = new Number(this.htmlBorder.clientWidth);
+	this.height = new Number(this.htmlBorder.clientHeight);
+}
 nscMessageBox.prototype.setstyle=function(){
 	this.htmlBorder.style.left=this.x + "px";
 	this.htmlBorder.style.top=this.y + "px";
