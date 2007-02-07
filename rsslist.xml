@@ -12,11 +12,12 @@
 			<tree name="[F]日刊少年囧rz" value="http://blog.sina.com.cn/myblog/index_rss.php?uid=1235461150" />
 			<tree name="[F]幺幺的任天堂" value="http://bbs.yyjoy.com/rss.php?auth=0" />
 			<tree name="[F]Engadget" value="http://chinese.engadget.com/rss.xml" />
-			<tree name="[F]Channel 10" value="http://on10.net/feeds/rss/" />
 			<tree name="[F]Channel 9" value="http://channel9.msdn.com/rss.aspx" />
+			<tree name="[F]Channel 10" value="http://on10.net/feeds/rss/" />
 			<tree name="[N]Keso" value="http://feeds.feedburner.com/PlayinWithIt" />
 			<tree name="[N]某阿姨" value="http://blog.sina.com.cn/myblog/index_rss.php?uid=1212268092" />
 			<tree name="[N]Anti" value="http://feeds.feedburner.com/blog-city/anti" />
+			<tree name="[WS]Jtam" value="http://blog.jtam.org/?feed=rss2" />
 		</tree>
 		<tree name="Friends' Blog" value="">
 			<tree name="3333" value="http://my.opera.com/XSK/xml/rss/blog/" />
