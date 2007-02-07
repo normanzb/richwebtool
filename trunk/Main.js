@@ -465,6 +465,18 @@ nsc.System.callBacker=function(_m,_c){
 		method.call(context);
 	}
 }
+//Property toString redirector
+nsc.System.PropertyRedirector=function(){
+	return function(){
+		this.call();
+	}
+}
+nsc.System.PropertyRedirector.toString = nsc.System.PropertyRedirector();
+//Property Builder
+nsc.System.PropertyBuilder=function(obj){
+	obj.toString = nsc.System.PropertyRedirector;
+}
+
 nsc.System.Track = function(_message,_error){
 	if (_DEBUG){
 		if (_error != null)
@@ -611,6 +623,8 @@ nsc.System.Environment = {
 		return clientHeight;
 	}
 };
+//nsc.System.Environment.ScrollLeft.toString = nsc.System.Environment.ScrollTop.toString = nsc.System.Environment.BodyClientWidth.toString = nsc.System.Environment.BodyClientHeight.toString = nsc.System.PropertyRedirector;
+
 nsc.System.Element = {
 	DisableSelect : nsc.CommonFunc.disableSelect,
 	EnableSelect : nsc.CommonFunc.enableSelect
