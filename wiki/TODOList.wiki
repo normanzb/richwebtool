@@ -1,3 +1,4 @@
+#labels Featured
 A todo list for this project.
 
 === Details ===
