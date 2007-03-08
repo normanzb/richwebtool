@@ -283,6 +283,7 @@ nsc.CommonFunc.disableSelect=function(_domobj){
 nsc.CommonFunc.enableSelect=function(_domobj){
 	
 }
+nsc.CommonFunc.URISticker=URISticker;
 /*
 <summary>
 <namespace>nsc.CommonFunc</namespace>
@@ -638,6 +639,95 @@ nsc.System.Element.Style.PositionFixed=function(element){
 }
 /* 
 <summary>
+<namespace>nsc.HTTP</namespace>
+<feature>Support http request</feature>
+</summary>
+*/
+nsc.HTTP = new Object();
+nsc.HTTP.Request = function(){
+	this.toString=function(){
+		return "nsc.HTTP.Request";
+	}
+}
+nsc.HTTP.Request.prototype = {
+	Url:"",
+	Method:"GET",
+	Data:"",
+	ContentType:"",
+	showProgressBar:false,
+	onSuccess:null,
+	Context:new Object(),
+	isAsydcronism:true,
+	XHR:new Object(),
+	enableProxy:false,
+	open:function(){
+		this.XHR = this.getInstanceOfXHR();
+		if (this.Method == null || this.Method == ""){
+			this.Method = "GET";
+		}
+		if (enableProxy == true){
+			this.Url = this.Url.substring(0,4).toLowerCase() == "http"?"./proxy.asp?url=" + this.Url:this.Url;
+		}
+		this.Url = nsc.CommonFunc.URISticker(this.Url);
+		nsc.System.Track(this.toString() + ":" + this.Url);
+		this.XHR.open(this.Method,this.Url,this.isAsyncronism);
+		if (this.ContentType != null && this.ContentType != "")
+			this.XHR.setRequestHeader("Content-Type",this.ContentType);
+		this.XHR.send(((this.Data == null || this.Data == "")?null:this.Data));
+		if (this.showProgressBar)
+			showLoading();
+		if (this.onSuccess == null)
+			return this.XHR;
+		else{
+			var xloader = this;
+			this.parent = this.Context;
+			if (this.XHR.readyState != 2 && this.XHR.readyState != 4){
+	        	this.XHR.onreadystatechange=function(){
+	        		if (xloader.XHR.readyState == 4){
+	        			if (this.showProgressBar);
+	        				closeLoading();
+	        			if(xloader.XHR.status == 200 || xloader.XHR.status == 0){
+	        				this.onSuccess.call(xloader);
+	        			}
+	        			else{
+	        				throw new Exception("Could not establish connection to specified server.");
+	        			}
+	        		}
+	        	}
+        	}
+        	else{
+        		this.onSuccess.call(xloader);
+        	}
+        	return this.XHR;
+		}
+	},
+	close:function(){
+		this.XHR.close();
+	},
+	getInstanceOfXHR:function(){
+		var txhr;
+		if (window.XMLHttpRequest) { // Mozilla, Safari,...
+            txhr = new XMLHttpRequest();
+            //if (xContentType != null && this.http_request.overrideMimeType)
+            //	this.http_request.overrideMimeType(xContentType);
+        } else if (window.ActiveXObject) { // IE
+            try {
+                txhr = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    txhr = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e) {}
+            }
+        }
+		if (!txhr) {
+            throw new Exception("Browser not support XMLHttpRequest.");
+        }
+        return txhr;
+	}
+}
+
+/* 
+<summary>
 <namespace>nsc.Data</namespace>
 <feature>Support data connection</feature>
 </summary>
@@ -810,10 +900,10 @@ nsc.Component = new Object();
 <feature>Cross-browser tree widget</feature>
 </summary>
 */
-nsc.Component.tree = function(_guid){
+nsc.Component.Tree = function(_guid){
 
 }
-nsc.Component.tree.prototype = {
+nsc.Component.Tree.prototype = {
 	DataSource:new String(),
 	Generate:function(_xmldoc){
 			var xd = _xmldoc;

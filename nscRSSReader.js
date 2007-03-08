@@ -1,7 +1,9 @@
 ﻿//Last modify at 12:01 PM 10/10/2006
 function nscRSSReaderPageInit(){
-	if(document.getElementById("nscRSSReader") == null){
-		IRSSReader = new nsc.Widgets.RSSReader("tempRSSReaderGUIDBlocker");
+	var nscRSSReaderName = "tempRSSReaderGUIDBlocker";
+	if(document.getElementById(nscRSSReaderName) == null){
+		nsc.System.Track(document.getElementById(nscRSSReaderName) == null);
+		IRSSReader = new nsc.Widgets.RSSReader(nscRSSReaderName);
 		IRSSReader.getself(IRSSReader);
 		IRSSReader.aggregatorURI="/richWebTools/rsslist.xml";
 		IRSSReader.feedURI=""//"/nscWebTools/proxy.asp?http://eroman.org/feed.asp?t="
@@ -27,10 +29,7 @@ nsc.Widgets.RSSReader.prototype={
 	},
 	DefineElements:function(){
 		var tBox = new Object();
-		if (this.aggregatorURI != "")
-			tBox.id=this.aggregatorURI;
-		else
-			tBox.id=this.feedURI;
+		tBox.id=this.GUID;
 		tBox.width=700;
 		tBox.height=500;
 		tBox.y=50;
