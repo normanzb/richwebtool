@@ -666,7 +666,7 @@ nsc.System.getElementByClassName = function(needle) {
 		_GetElementsByClass(outArray, document.documentElement, needle);
 		return outArray;
 	}
-	else (nsc.System.BrowserDetect.browser != "Firefox" && nsc.System.BrowserDetect.browser != "Explorer"){
+	else {
 		var         my_array = document.getElementsByTagName("*");
 		var         retvalue = new Array();
 		var        i;
