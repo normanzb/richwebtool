@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<nscConfig>
+	<AppSettings>
+		<Waiting value="0" />
+		<PreLoad value="true" />
+		<showSideBar value="false" />
+	</AppSettings>
+	<WebTools>		
+		<tool name="nscToolTip" type="Application" src="./nscToolTip.js" copyright="" autoload="1" init="nscToolTipPageInit();" />
+	</WebTools>
+</nscConfig>
