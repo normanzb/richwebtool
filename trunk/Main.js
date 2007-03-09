@@ -637,6 +637,50 @@ nsc.System.Element.Style.PositionFixed=function(element){
 	else
 		element.style.position="absolute";
 }
+
+nsc.System.getElementByClassName = function(needle) {
+	if (nsc.System.BrowserDetect.browser == "Firefox"){
+		var xpathResult = document.evaluate('//*[@class = needle]', document, null, 0, null);
+		var outArray = new Array();
+		while ((outArray[outArray.length] = xpathResult.iterateNext())) {
+		}
+		return outArray;
+	}
+	else if (nsc.System.BrowserDetect.browser == "Explorer"){
+		var _GetElementsByClass=function (outArray, seed, needle)
+		{
+			while (seed) {
+				if (seed.nodeType == Node.ELEMENT_NODE) {
+					if (seed.hasAttribute("class")) {
+						var c = " " + seed.className + " ";
+						if (c.indexOf(" " + needle + " ") != -1)
+						outArray.push(seed);
+					}
+					_GetElementsByClass(outArray, seed.firstChild, needle)
+				}
+				seed = seed.nextSibling;
+			}
+		}
+
+		var outArray = new Array();
+		_GetElementsByClass(outArray, document.documentElement, needle);
+		return outArray;
+	}
+	else (nsc.System.BrowserDetect.browser != "Firefox" && nsc.System.BrowserDetect.browser != "Explorer"){
+		var         my_array = document.getElementsByTagName("*");
+		var         retvalue = new Array();
+		var        i;
+		var        j;
+
+		for (i = 0, j = 0; i < my_array.length; i++)
+		{
+			var c = " " + my_array[i].className + " ";
+			if (c.indexOf(" " + needle + " ") != -1)
+			retvalue[j++] = my_array[i];
+		}
+		return retvalue;
+	}
+}
 /* 
 <summary>
 <namespace>nsc.HTTP</namespace>
