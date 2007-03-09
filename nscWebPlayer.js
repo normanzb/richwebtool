@@ -2,7 +2,7 @@
 //Last modify at 12:01 PM 10/10/2006
 nscURLPlaylist="/nscWebPlayerCaster/caster.asmx/PlayList";//AppPath + "/playlist.xml";
 nscURLPlaylistType="application/x-www-form-urlencoded";//null;
-nscURLPlaylistMethod="POST";//null;
+nscURLPlaylistMethod="GET";//null;
 nscURLCaster="/nscWebPlayerCaster/caster.asmx/CastMyMedia";
 nscWPConfig=false;
 nscWPMusics=false;

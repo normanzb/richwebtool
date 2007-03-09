@@ -6,69 +6,79 @@ nsc.Color.RGB = function(){
 nsc.Color.RGB.prototype = {
 	r:0,g:0,b:0,
 	init:function(){
-		this.R = function(_r){
-			if (_r != null){
-				if (_r > 255 || _r < 0)
-					throw "RGB value must between 0 and 255";
-				this.r = _r;
+		var _commonCMYKValueFunc = function(_color){
+			return function(_value){
+				if (_value != null){
+					if (_value > 255 || _value < 0)
+						throw "RGB value must between 0 and 255";
+					this[_color] = _value;
+				}
+				return this[_color];
 			}
-			return this.r
 		}
-		this.G = function(_g){
-			if (_g > 255 || _g < 0)
-				throw "RGB value must between 0 and 255";
-			this.g = _g;
-			return this.g;
-		}
-		this.B = function(_b){
-			if (_b > 255 || _b < 0)
-				throw "RGB value must between 0 and 255";
-			this.b = _b
-			return this.b;
-		}
-		nsc.System.PropertyBuilder(this.R);
-		nsc.System.PropertyBuilder(this.G);
-		nsc.System.PropertyBuilder(this.B);
+		this.R = _commonCMYKValueFunc.call(this,"r");
+		this.G = _commonCMYKValueFunc.call(this,"g");
+		this.B = _commonCMYKValueFunc.call(this,"b");
+		nsc.System.PropertyBuilder(this.R,this);
+		nsc.System.PropertyBuilder(this.G,this);
+		nsc.System.PropertyBuilder(this.B,this);
 	}
 }
 nsc.Color.CMYK = function(){
 	this.init();
 }
 nsc.Color.CMYK.prototype = {
-	C:new Number(),
-	M:new Number(),
-	Y:new Number(),
-	K:new Number()
+	c:0,m:0,y:0,k:0,
+	init:function(){
+		var _commonCMYKValueFunc = function(_color){
+			return function(_value){
+				if (_value != null){
+					if (_value > 100 || _value < 0)
+						throw "CMYK value must between 0 and 100";
+					this[_color] = _value;
+				}
+				return this[_color];
+			}
+		}
+		this.C = _commonCMYKValueFunc.call(this,"c");
+		this.M = _commonCMYKValueFunc.call(this,"m");
+		this.Y = _commonCMYKValueFunc.call(this,"y");
+		this.K = _commonCMYKValueFunc.call(this,"k");
+		nsc.System.PropertyBuilder(this.C,this);
+		nsc.System.PropertyBuilder(this.M,this);
+		nsc.System.PropertyBuilder(this.Y,this);
+		nsc.System.PropertyBuilder(this.K,this);
+	}
 }
 nsc.Color.Utility.RGB2CMYK = function(_rgb){
-	var cmky;
+	var cmyk = new nsc.Color.CMYK();;
 	var rgb;
 	if (_rgb instanceof nsc.Color.RGB){
 		rgb = _rgb;
 	}
 	else{
-		throw new Exception("argurment _rgb is not a instance of nsc.Color.RGB");
+		throw "argurment _rgb is not a instance of nsc.Color.RGB";
 	}
 	
 	var r = 1.0 - rgb.R / 255;
 	var g = 1.0 - rgb.G / 255;
 	var b = 1.0 - rgb.B / 255;
-	
+	nsc.System.Track(g);
 	if (r < g)
-		cmky.K = r;
+		cmyk.K(r);
 	else
-		cmky.K = g;
-	if (b < K)
-		cmky.K = b;
-
-	cmky.C = (r - cmyk.K)(1.0 - cmky.K);
-	cmky.M = (G - cmky.K)(1.0 - cmky.K);
-	cmky.Y = (B - cmky.K)(1.0 - cmky.K);
-
-	cmky.C = Math.floor((cmky.C * 100) + 0.5);
-	cmky.M = Math.floor((cmky.M * 100) + 0.5);
-	cmky.Y = Math.floor((cmky.Y * 100) + 0.5);
-	cmky.K = Math.floor((cmky.K * 100) + 0.5);
-
+		cmyk.K(g);
+	if (b < cmyk.K)
+		cmyk.K(b);
+	nsc.System.Track(new String(cmyk.K));
+	cmyk.C((r - cmyk.K)/(1.0 - cmyk.K));
+	cmyk.M((g - cmyk.K)/(1.0 - cmyk.K));
+	cmyk.Y((b - cmyk.K)/(1.0 - cmyk.K));
+	nsc.System.Track(new String(cmyk.K));
+	cmyk.C(Math.floor((cmyk.C * 100) + 0.5));
+	cmyk.M(Math.floor((cmyk.M * 100) + 0.5));
+	cmyk.Y(Math.floor((cmyk.Y * 100) + 0.5));
+	cmyk.K(Math.floor((cmyk.K * 100) + 0.5));
+	nsc.System.Track(new String(cmyk.K));
 	return cmyk;
 }
