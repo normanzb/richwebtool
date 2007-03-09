@@ -638,7 +638,7 @@ nsc.System.Element.Style.PositionFixed=function(element){
 		element.style.position="absolute";
 }
 
-nsc.System.getElementByClassName = function(needle) {
+nsc.System.getElementsByClassName = function(needle) {
 	if (nsc.System.BrowserDetect.browser == "Firefox"){
 		var xpathResult = document.evaluate('//*[@class = needle]', document, null, 0, null);
 		var outArray = new Array();
