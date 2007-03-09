@@ -463,7 +463,7 @@ nsc.System.callBacker=function(_m,_c){
 	var method = _m;
 	var context = _c;
 	return function(){
-		method.call(context);
+		return method.call(context);
 	}
 }
 //Property toString redirector
@@ -472,10 +472,18 @@ nsc.System.PropertyRedirector=function(){
 		return this.call();
 	}
 }
-nsc.System.PropertyRedirector.toString = nsc.System.PropertyRedirector();
+//nsc.System.PropertyRedirector.toString = nsc.System.PropertyRedirector();
+//Delete this function, this function is original written for shortcut of make a function as property
+//but because of JS is not support property and after a deep search into operator overloading, I found it was a impossible mission on JS1.2.
+//The hacked property can't not pass the value to variable before the equal operator. The expression:
+//variable = property just simply copy the property object to variable
+
 //Property Builder
-nsc.System.PropertyBuilder=function(obj){
-	obj.toString = nsc.System.PropertyRedirector();
+nsc.System.PropertyBuilder=function(obj,owner){
+	if (owner == null)
+		obj.toString = nsc.System.PropertyRedirector();
+	else
+		obj.toString = nsc.System.callBacker(obj,owner);
 }
 
 nsc.System.Track = function(_message,_error){
@@ -624,7 +632,7 @@ nsc.System.Environment = {
 		return clientHeight;
 	}
 };
-//nsc.System.Environment.ScrollLeft.toString = nsc.System.Environment.ScrollTop.toString = nsc.System.Environment.BodyClientWidth.toString = nsc.System.Environment.BodyClientHeight.toString = nsc.System.PropertyRedirector;
+nsc.System.Environment.ScrollLeft.toString = nsc.System.Environment.ScrollTop.toString = nsc.System.Environment.BodyClientWidth.toString = nsc.System.Environment.BodyClientHeight.toString = nsc.System.PropertyRedirector();
 
 nsc.System.Element = {
 	DisableSelect : nsc.CommonFunc.disableSelect,
