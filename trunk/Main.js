@@ -650,8 +650,8 @@ nsc.System.getElementsByClassName = function(needle) {
 		var _GetElementsByClass=function (outArray, seed, needle)
 		{
 			while (seed) {
-				if (seed.nodeType == Node.ELEMENT_NODE) {
-					if (seed.hasAttribute("class")) {
+				if (seed.nodeType == 1) { //1 equal Node_ELEMENT
+					if (seed.className != null && seed.className != "") {
 						var c = " " + seed.className + " ";
 						if (c.indexOf(" " + needle + " ") != -1)
 						outArray.push(seed);
