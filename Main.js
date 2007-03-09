@@ -469,13 +469,13 @@ nsc.System.callBacker=function(_m,_c){
 //Property toString redirector
 nsc.System.PropertyRedirector=function(){
 	return function(){
-		this.call();
+		return this.call();
 	}
 }
 nsc.System.PropertyRedirector.toString = nsc.System.PropertyRedirector();
 //Property Builder
 nsc.System.PropertyBuilder=function(obj){
-	obj.toString = nsc.System.PropertyRedirector;
+	obj.toString = nsc.System.PropertyRedirector();
 }
 
 nsc.System.Track = function(_message,_error){
@@ -734,7 +734,7 @@ nsc.HTTP.Request.prototype = {
 	        				this.onSuccess.call(xloader);
 	        			}
 	        			else{
-	        				throw new Exception("Could not establish connection to specified server.");
+	        				throw new "Could not establish connection to specified server.";
 	        			}
 	        		}
 	        	}
@@ -764,7 +764,7 @@ nsc.HTTP.Request.prototype = {
             }
         }
 		if (!txhr) {
-            throw new Exception("Browser not support XMLHttpRequest.");
+            throw new "Browser not support XMLHttpRequest.";
         }
         return txhr;
 	}
