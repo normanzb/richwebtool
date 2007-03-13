@@ -22,6 +22,37 @@ nsc.Color.RGB.prototype = {
 		nsc.System.PropertyBuilder(this.R,this);
 		nsc.System.PropertyBuilder(this.G,this);
 		nsc.System.PropertyBuilder(this.B,this);
+		this.Hex= function(_hex){
+			if (_hex != null){
+				var regex = new RegExp(/[0-9A-Fa-f]/);
+				if (_hex.length == 6 && regex.test(_hex)){
+					this.R(parseInt(_hex.substring(0,2),16));
+					this.G(parseInt(_hex.substring(2,4),16));
+					this.B(parseInt(_hex.substring(4,6),16));
+				}
+				else
+					throw "Please input a 6 length hex.";
+			}
+			var _r = nsc.System.parseHex(this.R,16);
+			var _g = nsc.System.parseHex(this.G,16);
+			var _b = nsc.System.parseHex(this.B,16);
+			var _addzero = function(_value){
+				var i;
+				var result = _value;
+				var tem = "";
+				for(i = 0;i < 2 - _r.length;i++){
+					tem += "0";
+				}
+				result = tem + result;
+				return result;
+			}
+			_r = _addzero(_r);
+			_g = _addzero(_g);
+			_b = _addzero(_b);
+			
+			return _r + _g + _b;
+		}
+		nsc.System.PropertyBuilder(this.Hex,this);
 	}
 }
 nsc.Color.CMYK = function(){
