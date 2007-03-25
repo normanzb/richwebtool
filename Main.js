@@ -156,11 +156,12 @@ function cssLoader(cssname,csspath,cssmedia){//CSS读取器
 	styleLink = document.createElement("link");
 	styleLink.setAttribute("id",cssname);
 	styleLink.setAttribute("rel","stylesheet");
+	styleLink.setAttribute("type","text/css");
 	styleLink.setAttribute("title","nscStyle");
 	if (cssmedia != null)
 		styleLink.setAttribute("media",cssmedia);
 	head.appendChild(styleLink);
-	document.getElementById(cssname).href=URISticker(csspath);
+	styleLink.href=URISticker(csspath);
 	nsc.System.Track("cssLoader:" + URISticker(csspath));
 }
 
@@ -239,8 +240,55 @@ nsc.Layout.CSS = function(){
 	this.forceMode = false;//强制读取模式
 	this.style = new Object();
 }
-nsc.Layout.CSS.rules = function(_pointer){//Cross-Browser的获取rules方式
-	return IE?nscCSSRef = document.styleSheets[_pointer].rules:nscCSSRef = document.styleSheets[_pointer].cssRules;
+//Cross-Browser的获取rules方式
+nsc.Layout.CSS.rules = function(_stylesheet){
+	var rules;
+	if (IE)
+		rules = _stylesheet.rules;
+	else
+		rules = _stylesheet.cssRules
+	return rules;
+}
+nsc.Layout.CSS.styleSheets = function(_csshref){
+	var i;
+	var j;
+	//Cross browser hack
+	var addRulesPointer = function(_stylesheet){
+		var styleSheet = _stylesheet;
+		if (nsc.System.BrowserDetect.browser == "Firefox")
+			styleSheet.rules = styleSheet.cssRules;
+		return styleSheet;
+	};
+
+	if (typeof _csshref == "string"){
+		try{
+			for(i = 0;i < document.styleSheets.length; i++){
+				var temhref = document.styleSheets[i].href;
+				var csshref = _csshref;
+				var getPureFileName = function(_filename){
+					var slash = "/";
+					_filename = _filename.split("?")[0];
+					if (_filename.lastIndexOf(slash) == -1)
+						slash = "\\";
+					return  _filename.substring(_filename.lastIndexOf(slash) + 1,_filename.length);
+				}
+				temhref = getPureFileName(temhref);
+				csshref = getPureFileName(csshref);
+				if (temhref.toLowerCase() == csshref.toLowerCase()){
+					return addRulesPointer(document.styleSheets[i]);
+				}
+			}
+		}
+		catch(e){
+			nsc.System.Track(e.code);
+			return false;
+		}
+	}
+	else{
+		return addRulesPointer(document.styleSheets[_csshref]);
+	}
+	
+	return false;
 }
 nsc.Layout.CSS.prototype = {
 	getFromSelector:function(_cs,_ct){
@@ -266,6 +314,68 @@ nsc.Layout.CSS.prototype = {
 		return _rules[i];
 	}
 }
+nsc.Layout.CSS.StatusDetector = function(_cssrule,_callback){
+	this.CallBack = _callback;
+	this.Init();
+	this.AnalyzeRule(_cssrule);
+}
+nsc.Layout.CSS.StatusDetector.prototype = {
+	isStopped:false,
+	Init:function(){
+		this.AnalyzeRule = function(_cssrule){
+			nsc.System.Track("Analyze CSS rule...");
+			var header;
+			var bodier;
+			if (new RegExp("::").test(_cssrule)){
+				header = _cssrule.split("::")[0];
+				bodier = _cssrule.split("::")[1];
+			}
+			else
+				header = _cssrule;
+			
+			if (new RegExp("#").test(header)){
+				this.CSSHref = header.split("#")[0]
+				this.Selector = "#" + header.split("#")[1];
+			}
+			else
+				this.CSSHref = header;
+			
+			if (bodier != null && new RegExp(":").test(bodier)){
+				this.Property = bodier.split(":")[0];
+				this.Value = bodier.split(":")[1];
+			}
+			else if(bodier != null)
+				throw "Incorrect css rule!";
+			
+			nsc.System.Track("\tCSSHref:" + this.CSSHref);
+			nsc.System.Track("\tSelector:" + this.Selector);
+			nsc.System.Track("\tProperty:" + this.Property);
+			nsc.System.Track("\tValue:" + this.Value);
+		};
+	},
+	Detect:function(){
+		if (this.isStopped == false){
+			var i;
+			if (nsc.Layout.CSS.styleSheets(this.CSSHref) != false){
+				var temstylesheet = nsc.Layout.CSS.styleSheets(this.CSSHref);
+				for (i = 0;i < temstylesheet.rules.length;i++){
+					if (temstylesheet.rules[i].selectorText == this.Selector){
+						setTimeout(this.CallBack,10);
+						return true;
+					}
+				}
+			}
+			
+			nsc.System.Track("CSS " + this.CSSHref + " have NOT loaded...");
+			setTimeout(nsc.System.callBacker(this.Detect,this),1000);
+			return false;
+		}
+	},
+	Stop:function(){
+		this.isStopped=true;
+	}
+}
+
 nsc.CommonFunc=new Object();
 nsc.CommonFunc.temp = new Object();
 nsc.CommonFunc.temp.disable=function(){
@@ -355,9 +465,7 @@ nsc.Events.AddEventHandler = function(_event){
 			if (nsc.System.BrowserDetect.browser == "Explorer")
 				_event.DOMObject.onmousemove=nsc.Events.EventHandlerRouter.call(this);
 			else if(nsc.System.BrowserDetect.browser == "Firefox")
-				_event.DOMObject.captureEvents(Event.MOUSEMOVE);
-				_event.DOMObject.onmousemove=nsc.Events.EventHandlerRouter.call(this);
-				
+				document.addEventListener('mousemove',nsc.Events.EventHandlerRouter.call(this), true);				
 			break;
 		case nsc.Events.OnMouseOver:
 			nsc.Events.PushToEventList(_event);
@@ -437,10 +545,10 @@ nsc.Events.target = function(evt){
 	return IE?event.srcElement:evt.target;
 }
 nsc.Events.offsetX = function(evt){
-	return nsc.System.BrowserDetect.browser == "Explorer"?nsc.Events.getEventObject(evt).offsetX:nsc.Events.getEventObject(evt).pageX -  nsc.Events.target(evt).offsetLeft;
+	return nsc.System.BrowserDetect.browser == "Explorer"?nsc.Events.getEventObject(evt).offsetX:nsc.Events.getEventObject(evt).layerX;//pageX -  nsc.Events.target(evt).offsetLeft;
 }
 nsc.Events.offsetY = function(evt){
-	return nsc.System.BrowserDetect.browser == "Explorer"?nsc.Events.getEventObject(evt).offsetY:nsc.Events.getEventObject(evt).pageY -  nsc.Events.target(evt).offsetTop;
+	return nsc.System.BrowserDetect.browser == "Explorer"?nsc.Events.getEventObject(evt).offsetY:nsc.Events.getEventObject(evt).layerY;//pageY -  nsc.Events.target(evt).offsetTop;
 }
 nsc.Events.getEventObject = function(evt){
 	return nsc.System.BrowserDetect.browser == "Explorer"?event:evt;
@@ -716,14 +824,25 @@ nsc.System.Environment.ScrollLeft.toString = nsc.System.Environment.ScrollTop.to
 nsc.System.Environment.Mouse = new Object();
 nsc.System.Environment.Mouse.X = function(){
 	//TODO recoding the mouse detection.
-	return nscCommonVar._x;
+	return nscCommonVar._x;// + (nsc.System.BrowserDetect.browser == "Explorer"?document.body.offsetLeft:0);
 }
 nsc.System.PropertyBuilder(nsc.System.Environment.Mouse.X);
 nsc.System.Environment.Mouse.Y = function(){
 	//TODO recoding the mouse detection.
-	return nscCommonVar._y;
+	return nscCommonVar._y;// + (nsc.System.BrowserDetect.browser == "Explorer"?document.body.offsetTop:0);
 }
 nsc.System.PropertyBuilder(nsc.System.Environment.Mouse.Y);
+
+nsc.System.IFrameWin = function(_iframe){
+	if (_iframe != null)
+		return _iframe.contentWindow;
+	else
+		throw "_iframe have not been added to DOM."
+}
+
+nsc.System.IFrameDoc = function(_iframe){
+	return nsc.System.IFrameWin(_iframe).document;//nsc.System.BrowserDetect.browser == "Explorer"?nsc.System.IFrameWin(_iframe).document:nsc.System.IFrameWin(_iframe).Document;
+}
 
 nsc.System.Element = {
 	DisableSelect : nsc.CommonFunc.disableSelect,
@@ -737,6 +856,15 @@ nsc.System.Element.Style.PositionFixed=function(element){
 		element.style.position="absolute";
 }
 
+nsc.System.Element.Left = function(_event){
+	return nsc.System.Environment.Mouse.X - nsc.Events.offsetX(_event);
+}
+nsc.System.PropertyBuilder(nsc.System.Element.Left);
+nsc.System.Element.Top = function(_event){
+	return nsc.System.Environment.Mouse.Y - nsc.Events.offsetY(_event);
+}
+nsc.System.PropertyBuilder(nsc.System.Element.Top);
+
 nsc.System.Element.DragController = function(_element){
 	this.Init();
 	this.BindElement(_element);
@@ -745,19 +873,39 @@ nsc.System.Element.DragController.prototype = {
 	Init:function(){
 		//private variable
 		this.element = new Object();
+		this.originalelement = new Object();
 		this.mousedownxfix = new Number();
 		this.mousedownyfix = new Number();
 		//public variable
 		this.isDraging = false;
 		this.DetectInterval = 10;
+		
 		this.BindElement = function(_element){
-			var element = _element;
-			if (element != null){
+			var element;
+
+			if (_element != null){
+				element = _element;
+				this.originalelement = _element;
+				
+				//If the input element is not absolutely positioned or included in other boxes, we must copy the element to out of the box for ease of coding.
 				if (_element.parentNode != document){
+					
 					element = _element.cloneNode(true);
 					document.body.appendChild(element);
-					_element.parentNode.removeChild(_element);
+					element.style.position = "absolute";
+					element.style.display="none";
+					//fix the left and top
+					var temOriginalEleMouseDown = function(_event){
+						this.originalelement.parentNode.removeChild(this.originalelement);
+						element.style.display = "block";
+						element.style.left = nsc.System.Environment.Mouse.X() - _event.offsetX + "px";
+						element.style.top = nsc.System.Environment.Mouse.Y() - _event.offsetY + "px";
+						nsc.System.Track(nsc.System.Environment.Mouse.Y());
+						this.onMouseDown(_event);
+					}
+					nsc.Events.AddEventHandler({DOMObject:this.originalelement,EventName:nsc.Events.OnMouseDown,CallBack:nsc.System.callBacker(temOriginalEleMouseDown,this)});
 				}
+				
 				this.element = element;
 				nsc.Events.AddEventHandler({DOMObject:this.element,EventName:nsc.Events.OnMouseDown,CallBack:nsc.System.callBacker(this.onMouseDown,this)});
 				nsc.Events.AddEventHandler({DOMObject:this.element,EventName:nsc.Events.OnMouseUp,CallBack:nsc.System.callBacker(this.onMouseUp,this)});
@@ -765,25 +913,23 @@ nsc.System.Element.DragController.prototype = {
 			return this.element;
 		};
 		nsc.System.PropertyBuilder(this.BindElement,this);
+		
 		this.onMouseDown = function(_event){
-			this.StartDrag(_event);
+			this.DragStart(_event);
 		};
-		this.StartDrag = function(_event){
+		this.DragStart = function(_event){
 			this.isDraging= true;
 			
 			this.mousedownxfix = _event.offsetX;
 			this.mousedownyfix = _event.offsetY;
 
-			this.BindElement().style.position = "absolute";
-			//this.BindElement().style.left = this.mousedownxfix + "px";
-			//this.BindElement().style.top = this.mousedownyfix + "px";
 			this.TraceMouse();
 		};
 		this.TraceMouse = function(){
 			if (this.isDraging  == true){
 				this.BindElement().style.left = nsc.System.Environment.Mouse.X() - this.mousedownxfix + "px";
 				this.BindElement().style.top = nsc.System.Environment.Mouse.Y() - this.mousedownyfix + "px";
-				nsc.System.Track(this.mousedownxfix + "px");
+nsc.System.Track(nsc.System.Environment.Mouse.Y());
 				setTimeout(nsc.System.callBacker(this.TraceMouse,this),this.DetectInterval);
 			}
 		};
@@ -792,6 +938,8 @@ nsc.System.Element.DragController.prototype = {
 		};
 	}
 }
+//TODO:DropController 
+
 
 nsc.System.getElementsByClassName = function(needle) {
 	if (nsc.System.BrowserDetect.browser == "Firefox"){
