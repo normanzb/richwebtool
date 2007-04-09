@@ -854,19 +854,18 @@ nsc.System.Element = {
 	EnableSelect : nsc.CommonFunc.enableSelect
 };
 nsc.System.Element.Style=new Object();
-nsc.System.Element.Style.PositionFixed=function(element){
-	if (nsc.System.BrowserDetect.browser == "Explorer" && nsc.System.BrowserDetect.version == "7")
-		element.style.position="fixed";
+nsc.System.Element.Style.PositionFixed=function(_element){
+	if (nsc.System.BrowserDetect.browser == "Explorer" && nsc.System.BrowserDetect.version <= 5.5)
+		_element.style.position="absolute";
 	else
-		element.style.position="absolute";
+		_element.style.position="fixed";
 }
 nsc.System.Element.Style.CursorPointer = function(_element){
-	if (nsc.System.BrowserDetect.browser == "Explorer" && nsc.System.BrowserDetect.version > 5.5)
-		_element.style.cursor = "pointer";
-	else
+	if (nsc.System.BrowserDetect.browser == "Explorer" && nsc.System.BrowserDetect.version <= 5.5)
 		_element.style.cursor = "hand";
+	else
+		_element.style.cursor = "pointer";
 }
-
 
 nsc.System.Element.Left = function(_event){
 	return nsc.System.Environment.Mouse.X - nsc.Events.offsetX(_event);
