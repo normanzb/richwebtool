@@ -95,6 +95,10 @@ function nscPageLoad(){
 	        }
 	}
 	//nscUIArea.style.left=new String(0 - new Number(new String(nscUIArea.style.width).Replace(" px",""))) + "px";
+	
+	if (typeof onNscLibLoad != "undefined"){
+		onNscLibLoad();
+	}
 }
 
 //加载WebTools
@@ -488,7 +492,8 @@ nsc.Events.AddEventHandler = function(_event){
 			_event.DOMObject.onunload=nsc.Events.EventHandlerRouter.call(this);
 			break;
 		default:
-			return false;
+			nsc.Events.PushToEventList(_event);
+			_event.DOMObject[_event.EventName]=nsc.Events.EventHandlerRouter.call(this);
 	}
 }
 nsc.Events.PushToEventList = function(_event){
@@ -855,6 +860,13 @@ nsc.System.Element.Style.PositionFixed=function(element){
 	else
 		element.style.position="absolute";
 }
+nsc.System.Element.Style.CursorPointer = function(_element){
+	if (nsc.System.BrowserDetect.browser == "Explorer" && nsc.System.BrowserDetect.version > 5.5)
+		_element.style.cursor = "pointer";
+	else
+		_element.style.cursor = "hand";
+}
+
 
 nsc.System.Element.Left = function(_event){
 	return nsc.System.Environment.Mouse.X - nsc.Events.offsetX(_event);
@@ -1273,6 +1285,73 @@ nsc.Component.Tree.prototype = {
 			}
 	}
 }
+
+nsc.Component.Windows = nscMessageBox;
+
+nsc.Component.Windows.LayerManager = function( _range){
+	this.Init();
+	this.SetRange(_range);
+};
+
+nsc.Component.Windows.LayerManager.prototype = {
+	MinLayer:0,
+	MaxLayer:10000,
+	Init:function(){
+		this.SetRange = function(_range){
+			this.MinLayer = _range.Min;
+			this.MaxLayer = _range.Max;
+		};
+		this.BindedStatus = function(){
+		};
+		this.BindedStatus.prototype = {
+			Layer:0,
+			Element:new Object()
+		};
+		this.BindedList = new Array();
+		this.Count = function(){
+			return this.BindedList.length;
+		}
+		nsc.System.PropertyBuilder(this.Count,this);
+	},
+	BindElement:function(_bindstatus){
+		if (this.GetBindedElement(_bindstatus.Element)){
+			AddBindedElement(_bindstatus);
+		}
+		
+	},
+	GetBindedElement:function(_element){
+		var i;
+		for(i = 0;i > BindedList.length; i ++){
+			if (BindedList[i].Element == _element)
+				return {Layer:i,Element:BindedList[i]};
+		}
+		return false;
+	},
+	AddBindedElement:function(_bindstatus){
+		if(this.BindedList.length <= _bindstatus.Layer){
+			this.BindedList.push(_bindstatus.Element);
+			_bindstatus.Element.style.zIndex = _bindstatus.Layer;
+		}
+		else{
+			var tem1 = this.BindedList[_bindstatus.Layer];
+			var tem2;
+			this.BindedList[_bindstatus.Layer] = _bindstatus.Element;
+			_bindstatus.Element.style.zIndex = _bindstatus.Layer;
+			var i;
+			this.BindedList.push(new BindedStatus());
+			for (i = (_bindstatus.Layer + 1); i < this.BindedList.length; i++){
+				tem2 = this.BindedList[i];
+				this.BindedList[i] = tem1;
+				tem1.style.zIndex = i;
+				tem1 = tem2;
+			}
+			
+		}
+	},
+	SetBindedElement:function(){
+		//TODO
+	}
+};
 //=========================================================Recontrustion End==================================
 function getCSSSelector(_cssref,_selector){
 	var i=0;
