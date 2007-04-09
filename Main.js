@@ -855,7 +855,7 @@ nsc.System.Element = {
 };
 nsc.System.Element.Style=new Object();
 nsc.System.Element.Style.PositionFixed=function(_element){
-	if (nsc.System.BrowserDetect.browser == "Explorer" && nsc.System.BrowserDetect.version <= 5.5)
+	if (nsc.System.BrowserDetect.browser == "Explorer" && nsc.System.BrowserDetect.version <= 6)
 		_element.style.position="absolute";
 	else
 		_element.style.position="fixed";
