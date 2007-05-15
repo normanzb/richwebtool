@@ -1,4 +1,4 @@
-#Tabber control sample
+Tabber control sample
 
 = Introduction =
 
