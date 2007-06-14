@@ -635,6 +635,7 @@ nsc.System.PropertyRedirector=function(){
 //but because of JS is not support property and after a deep search into operator overloading, I found it was a impossible mission on JS1.2.
 //The hacked property can't not pass the value to variable before the equal operator. The expression:
 //variable = property just simply copy the property object to variable
+//Update 6/15/2007: found valueOf to deal with this
 
 //Property Builder
 nsc.System.PropertyBuilder = function(obj,owner){
@@ -643,10 +644,14 @@ nsc.System.PropertyBuilder = function(obj,owner){
 		owner.__defineGetter__(obj,owner[obj]);
 	}
 	else{
-		if (owner == null)
+		if (owner == null){
 			obj.toString = nsc.System.PropertyRedirector();
-		else
+			obj.valueOf = nsc.System.PropertyRedirector();
+		}
+		else{
 			obj.toString = nsc.System.callBacker(obj,owner);
+			obj.valueOf = nsc.System.callBacker(obj,owner);
+		}
 	}
 }
 
