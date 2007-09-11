@@ -1020,7 +1020,7 @@ nsc.HTTP.Request.prototype = {
 	showProgressBar:false,
 	onSuccess:null,
 	Context:new Object(),
-	isAsydcronism:true,
+	isAsyncronism:true,
 	XHR:new Object(),
 	enableProxy:false,
 	open:function(){
