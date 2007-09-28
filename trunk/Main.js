@@ -542,9 +542,7 @@ nscMessageBox.prototype.open=function(){
 			this.htmlBorder.appendChild(htmlBottomer);
 		//Modify at 4.24.06 
 		document.body.appendChild(this.htmlBorder);
-		
-		//Deleted by Norman Xu, 9/27/2007
-		//this.setstyle();
+		this.setstyle();
 		//nscInnerUIArea.appendChild(this.htmlBorder);
 		this.htmlBorder.onselectstart=new Function("if (IE?event.srcElement.tagName.toLowerCase() == \"div\":evt.target.tagName.toLowerCase() == \"div\")return false;");
 		if (typeof nscCommonVar.opMSB.htmlBorder != "undefined")
@@ -558,10 +556,6 @@ nscMessageBox.prototype.open=function(){
 	this.goroot();
 	this.htmlBorder.style.visibility="visible";
 	this.fader.from=this.alpha;
-	
-	//Modified by Norman Xu, 9/27/2007
-	//Set style for messagebox, this line is moved to avoid could not get clientWidth when box is shown first time.
-	this.setstyle();
 	this.hidden=false;
 }
 nscMessageBox.prototype.show=function(){
@@ -588,10 +582,17 @@ nscMessageBox.prototype.setstyle=function(){
 	this.htmlBorder.style.left=this.x + "px";
 	this.htmlBorder.style.top=this.y + "px";
 	if (this.width > 0 || this.height > 0){
+		var cssGetor = new nsc.Layout.CSS();
+		//TODO
+		cornerBR = cssGetor.getFromSelector(".nscMSGBoxBottomerRight","nscStyle").style.width.replace("px","") * 1;
+		cornerBL = cssGetor.getFromSelector(".nscMSGBoxBottomerLeft","nscStyle").style.width.replace("px","") * 1;
+		cornerTR = cssGetor.getFromSelector(".nscMSGBoxToperRight","nscStyle").style.width.replace("px","") * 1;
+		cornerTL = cssGetor.getFromSelector(".nscMSGBoxToperLeft","nscStyle").style.width.replace("px","") * 1;
+		
 		if (this.width > 100){
 			this.htmlBorder.childNodes[2].style.width = this.htmlBorder.style.width=this.width + "px";
-			this.htmlBorder.childNodes[0].childNodes[1].style.width = (this.width - new Number(this.htmlBorder.childNodes[0].childNodes[0].clientWidth) * 2) + "px";
-			this.htmlBorder.childNodes[2].childNodes[1].style.width = (this.width - new Number(this.htmlBorder.childNodes[2].childNodes[0].clientWidth) * 2) + "px";
+			this.htmlBorder.childNodes[0].childNodes[1].style.width = (this.width - cornerTR - cornerTL) + "px";
+			this.htmlBorder.childNodes[2].childNodes[1].style.width = (this.width - cornerBR - cornerBL) + "px";
 		}
 		if (this.height > 100){
 			this.htmlBorder.style.height=this.height + "px";
@@ -892,7 +893,7 @@ nsc.Layout.CSS.prototype = {
 				if (document.styleSheets[j].title == _ct)
 					break;
 			}
-			this.pointer = j;
+			this.pointer = document.styleSheets[j];
 				_rules = nsc.Layout.CSS.rules(this.pointer);
 			for(i=0;i < _rules.length;i++){
 				if (_rules[i].selectorText == _cs)
