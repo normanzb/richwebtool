@@ -948,11 +948,18 @@ nsc.Layout.CSS.StatusDetector.prototype = {
 			var i;
 			if (nsc.Layout.CSS.styleSheets(this.CSSHref) != false){
 				var temstylesheet = nsc.Layout.CSS.styleSheets(this.CSSHref);
-				for (i = 0;i < temstylesheet.rules.length;i++){
-					if (temstylesheet.rules[i].selectorText == this.Selector){
-						setTimeout(this.CallBack,10);
-						return true;
+				//if access denied is thrown, try again.
+				try{
+					for (i = 0;i < temstylesheet.rules.length;i++){
+							if (temstylesheet.rules[i].selectorText == this.Selector){
+								setTimeout(this.CallBack,10);
+								return true;
+							}
 					}
+				}
+				catch(e){
+					if (e.message.toLowerCase().indexOf("access is denied") == -1)
+						throw e;
 				}
 			}
 			
